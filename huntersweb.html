@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hunter's Web — Specimen Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15110D;
+    --bg-alt:#1D1712;
+    --bg-card:#211A13;
+    --ink:#EDE3CF;
+    --ink-dim:#B7AA92;
+    --gold:#C9A227;
+    --rust:#8B4A34;
+    --thread:#6E6350;
+    --line: rgba(237,227,207,0.10);
+    --radius: 3px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    line-height:1.1;
+    margin:0;
+    color:var(--ink);
+  }
+
+  a{ color:inherit; }
+
+  :focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav.top{
+    position:relative;
+    z-index:5;
+    padding:28px 0;
+  }
+  nav.top .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-size:1.15rem;
+    letter-spacing:0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .brand em{
+    font-style:italic;
+    color:var(--ink-dim);
+    font-size:0.75rem;
+    font-family:'Work Sans', sans-serif;
+  }
+  .navlinks{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    margin:0; padding:0;
+    font-size:0.92rem;
+    color:var(--ink-dim);
+  }
+  .navlinks a{ text-decoration:none; }
+  .navlinks a:hover{ color:var(--gold); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    padding-top:20px;
+  }
+  .hero-web{
+    position:absolute;
+    top:-140px;
+    right:-160px;
+    width:min(720px, 90vw);
+    height:min(720px, 90vw);
+    pointer-events:none;
+    opacity:0.9;
+  }
+  .hero-web line, .hero-web polyline{
+    fill:none;
+    stroke:var(--thread);
+    stroke-width:1;
+    stroke-linecap:round;
+  }
+  .hero-web .anchor{ stroke:var(--thread); opacity:0.55; }
+  .hero-spider{ fill:var(--bg-alt); }
+  .hero-spider .leg{ stroke:var(--rust); stroke-width:2.2; fill:none; stroke-linecap:round; }
+  .hero-spider .body{ fill:var(--rust); }
+
+  .hero-content{
+    position:relative;
+    padding:70px 0 120px;
+    max-width:640px;
+  }
+  .hero-content h1{
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    letter-spacing:-0.01em;
+  }
+  .hero-content h1 .amber{ color:var(--gold); }
+  .hero-content p.lede{
+    margin-top:22px;
+    font-size:1.1rem;
+    color:var(--ink-dim);
+    max-width:46ch;
+  }
+  .hero-meta{
+    margin-top:36px;
+    display:flex;
+    gap:36px;
+    flex-wrap:wrap;
+  }
+  .hero-meta div{ font-size:0.85rem; color:var(--ink-dim); }
+  .hero-meta strong{
+    display:block;
+    font-family:'Fraunces', serif;
+    font-size:1.6rem;
+    color:var(--ink);
+    font-weight:500;
+  }
+
+  /* ---------- SILK DIVIDER ---------- */
+  .thread-divider{
+    width:100%;
+    height:34px;
+    display:block;
+  }
+  .thread-divider path{
+    fill:none;
+    stroke:var(--line);
+    stroke-width:1;
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  section{ padding:64px 0; }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    margin-bottom:40px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:22px;
+  }
+  .section-head h2{ font-size:1.9rem; }
+  .section-head p{
+    color:var(--ink-dim);
+    max-width:34ch;
+    font-size:0.95rem;
+    margin:0;
+  }
+
+  .field-note{
+    max-width:66ch;
+    color:var(--ink-dim);
+    font-size:1.02rem;
+  }
+  .field-note strong{ color:var(--ink); font-weight:500; }
+
+  /* ---------- SPECIES GRID ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .card{
+    background:var(--bg-card);
+    padding:28px 26px 30px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    transition:background 0.2s ease;
+  }
+  .card:hover{ background:#241C14; }
+  .card .icon-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .spider-icon{ width:46px; height:46px; }
+  .spider-icon .leg{ stroke:var(--spider-color, var(--rust)); stroke-width:2; fill:none; stroke-linecap:round; }
+  .spider-icon .body{ fill:var(--spider-color, var(--rust)); }
+  .spider-icon .mark{ fill:var(--mark-color, transparent); }
+  .habitat-tag{
+    font-size:0.72rem;
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+    padding:4px 9px;
+    border-radius:999px;
+  }
+  .card h3{ font-size:1.25rem; }
+  .card .sci{
+    font-style:italic;
+    color:var(--ink-dim);
+    font-size:0.85rem;
+    margin-top:-8px;
+  }
+  .card p{
+    color:var(--ink-dim);
+    font-size:0.93rem;
+    margin:0;
+  }
+
+  
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:50px 0 60px;
+    border-top:1px solid var(--line);
+  }
+  footer .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  footer p{ color:var(--ink-dim); font-size:0.85rem; margin:0; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px){
+    .grid{ grid-template-columns:repeat(2, 1fr); }
+    .anatomy{ grid-template-columns:1fr; }
+    .silk-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width: 560px){
+    .wrap{ padding:0 20px; }
+    .grid{ grid-template-columns:1fr; }
+    .silk-grid{ grid-template-columns:1fr; }
+    .navlinks{ display:none; }
+    .hero-meta{ gap:24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-web line, .hero-web polyline{
+      stroke-dashoffset:0 !important;
+      transition:none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <div class="brand">Webwright <em>a field guide to spiders</em></div>
+    <ul class="navlinks">
+      <li><a href="#catalog">Specimens</a></li>
+      <li><a href="#anatomy">Anatomy</a></li>
+      <li><a href="#silk">Silk</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <svg class="hero-web" id="heroWeb" viewBox="0 0 600 600" aria-hidden="true"></svg>
+  <div class="wrap hero-content">
+    <h1>Eight legs, three lungs,<br>and a thread <span class="amber">stronger than steel</span> by weight.</h1>
+    <p class="lede">A working catalog of the animals most of us step around — how they're built, how they hunt, and why the silk holds.</p>
+    <div class="hero-meta">
+      <div><strong>50,000+</strong>described species</div>
+      <div><strong>400M</strong>years on Earth</div>
+      <div><strong>8</strong>eyes, on most</div>
+    </div>
+  </div>
+</section>
+
+<svg class="thread-divider" viewBox="0 0 1120 34" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0,17 Q 140,2 280,17 T 560,17 T 840,17 T 1120,17"/>
+</svg>
+
+<section id="catalog">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Specimen catalog</h2>
+      <p>Six species, chosen for how differently they've solved the same problem: staying alive with no bones and no backup.</p>
+    </div>
+
+    <p class="field-note" style="margin-bottom:40px;">
+      <strong>Not all spiders build webs.</strong> Roughly half of known species hunt without one — running down prey, ambushing from burrows, or stalking in daylight with eyesight sharper than their size suggests. The catalog below mixes web-builders and wanderers on purpose.
+    </p>
+
+    <div class="grid">
+
+      <article class="card" style="--spider-color:#C9A227; --mark-color:#7A6112;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Golden silk orb-weaver icon">
+            <g class="leg">
+              <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
+              <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
+            </g>
+            <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
+            <ellipse class="body" cx="50" cy="58" rx="14" ry="18"/>
+            <circle class="mark" cx="50" cy="55" r="5"/>
+          </svg>
+          <span class="habitat-tag">warm forest</span>
+        </div>
+        <h3>Golden Silk Orb-Weaver</h3>
+        <div class="sci">Trichonephila clavipes</div>
+        <p>Spins webs with a visible golden cast in low light. Females can be twenty times the mass of males, and the web itself is often rebuilt overnight, thread by thread.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#8B4A34; --mark-color:#5C2E1F;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Wolf spider icon">
+            <g class="leg">
+              <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
+              <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
+            </g>
+            <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
+            <ellipse class="body" cx="50" cy="60" rx="13" ry="20"/>
+          </svg>
+          <span class="habitat-tag">grassland</span>
+        </div>
+        <h3>Wolf Spider</h3>
+        <div class="sci">Lycosidae</div>
+        <p>Hunts on foot instead of waiting in silk. Mothers carry their egg sac attached to the spinnerets, then let the spiderlings ride on their back until the first molt.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#3E6E63; --mark-color:#C9A227;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Peacock jumping spider icon">
+            <g class="leg">
+              <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
+              <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
+            </g>
+            <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
+            <ellipse class="body" cx="50" cy="58" rx="14" ry="17"/>
+            <circle class="mark" cx="44" cy="55" r="3"/>
+            <circle class="mark" cx="56" cy="55" r="3"/>
+            <circle class="mark" cx="50" cy="65" r="3"/>
+          </svg>
+          <span class="habitat-tag">open scrub</span>
+        </div>
+        <h3>Peacock Jumping Spider</h3>
+        <div class="sci">Maratus volans</div>
+        <p>Males raise iridescent abdominal flaps and drum out a rhythm to court a female — one of the few courtship displays built as much for sound as for color.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#9C8B6E; --mark-color:transparent;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Huntsman spider icon">
+            <g class="leg">
+              <path d="M38 45 L8 32 M38 45 L5 50 M38 45 L10 68 M38 45 L20 85"/>
+              <path d="M62 45 L92 32 M62 45 L95 50 M62 45 L90 68 M62 45 L80 85"/>
+            </g>
+            <ellipse class="body" cx="50" cy="45" rx="10" ry="7"/>
+            <ellipse class="body" cx="50" cy="58" rx="12" ry="12"/>
+          </svg>
+          <span class="habitat-tag">bark & crevice</span>
+        </div>
+        <h3>Huntsman Spider</h3>
+        <div class="sci">Sparassidae</div>
+        <p>Flattened enough to slide under loose bark, and able to shift legs into a crab-like sideways gait — one of the fastest walkers, relative to size, of any land animal.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#161213; --mark-color:#A6332B;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Redback spider icon">
+            <g class="leg">
+              <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
+              <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
+            </g>
+            <ellipse class="body" cx="50" cy="42" rx="8" ry="8"/>
+            <ellipse class="body" cx="50" cy="59" rx="12" ry="16"/>
+            <rect class="mark" x="46" y="52" width="8" height="16" rx="2"/>
+          </svg>
+          <span class="habitat-tag">dry shelter</span>
+        </div>
+        <h3>Redback Spider</h3>
+        <div class="sci">Latrodectus hasseltii</div>
+        <p>A close relative of the black widow, marked by a red stripe down the abdomen. The bite is medically significant but rarely dangerous now that antivenom is widely available.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#6B4A3A; --mark-color:transparent;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Chilean rose tarantula icon">
+            <g class="leg" style="stroke-width:3.4;">
+              <path d="M38 42 L12 25 M38 42 L8 48 M38 42 L12 68 M38 42 L24 84"/>
+              <path d="M62 42 L88 25 M62 42 L92 48 M62 42 L88 68 M62 42 L76 84"/>
+            </g>
+            <ellipse class="body" cx="50" cy="43" rx="10" ry="9"/>
+            <ellipse class="body" cx="50" cy="61" rx="16" ry="19"/>
+          </svg>
+          <span class="habitat-tag">arid burrow</span>
+        </div>
+        <h3>Chilean Rose Tarantula</h3>
+        <div class="sci">Grammostola rosea</div>
+        <p>Slow-moving and famously unbothered by handling, which has made it one of the most kept tarantulas. Females can live more than twenty years — decades longer than most spiders.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">
+    <p>Hunter's Web — field notes on Araneae.</p>
+    <p>Compiled for the curious, not the squeamish.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const svg = document.getElementById('heroWeb');
+  const ns = 'http://www.w3.org/2000/svg';
+  const cx = 470, cy = 130, R = 260;
+  const numRadii = 14;
+  const numRings = 6;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // slight per-radius jitter so the web reads as hand-spun, not a perfect circle
+  const jitter = [];
+  for(let i=0;i<numRadii;i++){ jitter.push(0.85 + Math.random()*0.3); }
+
+  const points = []; // points[radiusIndex][ringIndex]
+  for(let i=0;i<numRadii;i++){
+    const angle = (i/numRadii) * Math.PI*2;
+    const row = [];
+    for(let r=1;r<=numRings;r++){
+      const frac = (r/numRings) * jitter[i];
+      const px = cx + Math.cos(angle) * R * frac;
+      const py = cy + Math.sin(angle) * R * frac;
+      row.push([px,py]);
+    }
+    points.push(row);
+    // radius line, from center to outer point
+    const outer = row[row.length-1];
+    const line = document.createElementNS(ns,'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+    line.setAttribute('x2', outer[0]); line.setAttribute('y2', outer[1]);
+    svg.appendChild(line);
+
+    // anchor thread beyond the web edge, to viewBox border
+    const anchor = document.createElementNS(ns,'line');
+    anchor.setAttribute('class','anchor');
+    anchor.setAttribute('x1', outer[0]); anchor.setAttribute('y1', outer[1]);
+    anchor.setAttribute('x2', cx + Math.cos(angle) * (R*1.35));
+    anchor.setAttribute('y2', cy + Math.sin(angle) * (R*1.35));
+    svg.appendChild(anchor);
+  }
+
+  // spiral rings connecting same-index points across radii
+  const rings = [];
+  for(let r=0;r<numRings;r++){
+    const pl = document.createElementNS(ns,'polyline');
+    const pts = points.map(row => row[r]);
+    pts.push(pts[0]); // close the ring
+    pl.setAttribute('points', pts.map(p=>p.join(',')).join(' '));
+    svg.appendChild(pl);
+    rings.push(pl);
+  }
+
+  if(!reduce){
+    const all = svg.querySelectorAll('line, polyline');
+    all.forEach((el, idx) => {
+      const len = el.getTotalLength ? el.getTotalLength() : 200;
+      el.style.strokeDasharray = len;
+      el.style.strokeDashoffset = len;
+      el.style.transition = 'stroke-dashoffset 900ms ease';
+      setTimeout(()=>{ el.style.strokeDashoffset = 0; }, 60 + idx*22);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

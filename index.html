@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roski Deluxe Nexus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #100E1B;
+    --panel: rgba(28, 24, 48, 0.55);
+    --panel-border: rgba(255,255,255,0.08);
+    --ink: #EFEDFB;
+    --ink-dim: #9C97BE;
+    --accent: #7C5CFC;
+    --accent-2: #33E6B8;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:48px 20px;
+    overflow-x:hidden;
+  }
+
+  /* ---------- geometric background ---------- */
+  .bg{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    background:var(--bg);
+  }
+  .bg svg{ width:100%; height:100%; display:block; }
+  .bg .tri{ animation: drift 26s ease-in-out infinite; transform-origin:center; }
+  .bg .tri:nth-child(3n){ animation-duration:32s; }
+  .bg .tri:nth-child(5n){ animation-duration:20s; animation-direction:reverse; }
+  @keyframes drift{
+    0%   { transform: translateY(0) rotate(0deg); }
+    50%  { transform: translateY(-14px) rotate(1.2deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+  }
+  .bg .grid-dots{ opacity:0.25; }
+  .bg .glow{ opacity:0.55; }
+
+  @media (prefers-reduced-motion: reduce){
+    .bg .tri{ animation:none !important; }
+  }
+
+  /* ---------- content ---------- */
+  main{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:640px;
+  }
+
+  header{
+    text-align:center;
+    margin-bottom:40px;
+  }
+  .mark{
+    width:48px; height:48px;
+    margin:0 auto 22px;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(2rem, 5vw, 2.7rem);
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  h1 span{ color:var(--accent-2); }
+  header p{
+    color:var(--ink-dim);
+    font-size:0.98rem;
+    margin:12px 0 0;
+  }
+
+  .links{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .link-slot{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:16px 20px;
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    text-decoration:none;
+    color:var(--ink);
+    backdrop-filter: blur(10px);
+    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  }
+  .link-slot:hover{
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    background: rgba(124, 92, 252, 0.12);
+  }
+  .link-slot .glyph{
+    width:34px; height:34px;
+    flex:0 0 auto;
+    border-radius:9px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:0.85rem;
+    color:#100E1B;
+  }
+  .link-slot .text{ flex:1; min-width:0; }
+  .link-slot .label{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1rem;
+    font-weight:500;
+  }
+  .link-slot .url{
+    font-size:0.82rem;
+    color:var(--ink-dim);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:block;
+  }
+  .link-slot .go{
+    color:var(--ink-dim);
+    font-size:1.1rem;
+    flex:0 0 auto;
+  }
+
+  footer{
+    text-align:center;
+    margin-top:34px;
+    color:var(--ink-dim);
+    font-size:0.8rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg">
+  <svg viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#7C5CFC"/>
+        <stop offset="100%" stop-color="#33E6B8"/>
+      </linearGradient>
+      <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#7C5CFC" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#7C5CFC" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#33E6B8" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#33E6B8" stop-opacity="0"/>
+      </radialGradient>
+      <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+        <circle cx="1.2" cy="1.2" r="1.2" fill="#FFFFFF"/>
+      </pattern>
+    </defs>
+
+    <rect width="1200" height="1200" fill="#100E1B"/>
+    <rect width="1200" height="1200" fill="url(#dots)" class="grid-dots"/>
+
+    <circle class="glow" cx="180" cy="160" r="320" fill="url(#glow1)"/>
+    <circle class="glow" cx="1050" cy="980" r="380" fill="url(#glow2)"/>
+
+    <g fill="none" stroke="url(#g1)" stroke-width="1" opacity="0.35">
+      <polygon class="tri" points="60,40 220,120 40,220"/>
+      <polygon class="tri" points="980,60 1160,40 1140,200"/>
+      <polygon class="tri" points="180,980 40,1140 260,1160"/>
+      <polygon class="tri" points="1020,1080 1180,960 1180,1180"/>
+      <polygon class="tri" points="560,40 700,10 660,140"/>
+      <polygon class="tri" points="20,560 140,480 160,660"/>
+      <polygon class="tri" points="1150,540 1080,660 1200,720"/>
+      <polygon class="tri" points="520,1140 640,1060 700,1190"/>
+    </g>
+
+    <g fill="#7C5CFC" opacity="0.10">
+      <polygon class="tri" points="300,220 380,180 400,280"/>
+      <polygon class="tri" points="880,760 960,720 980,820"/>
+    </g>
+    <g fill="#33E6B8" opacity="0.10">
+      <polygon class="tri" points="820,260 900,300 800,360"/>
+      <polygon class="tri" points="260,820 340,860 240,920"/>
+    </g>
+
+    <g stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="1">
+      <polygon class="tri" points="600,500 760,560 660,700 500,660"/>
+      <polygon class="tri" points="760,560 900,540 880,680 660,700"/>
+      <polygon class="tri" points="500,660 660,700 600,840 440,800"/>
+    </g>
+  </svg>
+</div>
+
+<main>
+  <header>
+    <svg class="mark" viewBox="0 0 48 48" aria-hidden="true">
+      <polygon points="24,4 44,16 44,34 24,44 4,34 4,16" fill="none" stroke="url(#g1)" stroke-width="2"/>
+      <polygon points="24,14 34,20 34,30 24,36 14,30 14,20" fill="url(#g1)" opacity="0.9"/>
+    </svg>
+    <h1>Roski Deluxe <span>Nexus</span></h1>
+    <p>Every link, one address.</p>
+  </header>
+
+  <nav class="links">
+    <a class="link-slot" href="#">
+      <span class="glyph">01</span>
+      <span class="text">
+        <span class="label">Arachnids & Ecology</span>
+        <span class="url">huntersweb.html</span>
+      </span>
+      <span class="go">→</span>
+    </a>
+    <a class="link-slot" href="#">
+      <span class="glyph">02</span>
+      <span class="text">
+        <span class="label">Link title</span>
+        <span class="url">yourdomain.com/link-two</span>
+      </span>
+      <span class="go">→</span>
+    </a>
+    <a class="link-slot" href="#">
+      <span class="glyph">03</span>
+      <span class="text">
+        <span class="label">Link title</span>
+        <span class="url">yourdomain.com/link-three</span>
+      </span>
+      <span class="go">→</span>
+    </a>
+    <a class="link-slot" href="#">
+      <span class="glyph">04</span>
+      <span class="text">
+        <span class="label">Link title</span>
+        <span class="url">yourdomain.com/link-four</span>
+      </span>
+      <span class="go">→</span>
+    </a>
+    <a class="link-slot" href="#">
+      <span class="glyph">05</span>
+      <span class="text">
+        <span class="label">Link title</span>
+        <span class="url">yourdomain.com/link-five</span>
+      </span>
+      <span class="go">→</span>
+    </a>
+    <a class="link-slot" href="#">
+      <span class="glyph">06</span>
+      <span class="text">
+        <span class="label">Link title</span>
+        <span class="url">yourdomain.com/link-six</span>
+      </span>
+      <span class="go">→</span>
+    </a>
+  </nav>
+
+  <footer>Roski Deluxe Nexus</footer>
+</main>
+
+</body>
+</html>
