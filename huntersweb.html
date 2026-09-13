@@ -430,65 +430,62 @@
 
 <script>
 (function(){
-  const svg = document.getElementById('heroWeb');
   const ns = 'http://www.w3.org/2000/svg';
-  const cx = 470, cy = 130, R = 260;
-  const numRadii = 14;
-  const numRings = 6;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // slight per-radius jitter so the web reads as hand-spun, not a perfect circle
-  const jitter = [];
-  for(let i=0;i<numRadii;i++){ jitter.push(0.85 + Math.random()*0.3); }
+  function generateWeb(svg, cx, cy, R, numRadii, numRings){
+    const jitter = [];
+    for(let i=0;i<numRadii;i++){ jitter.push(0.85 + Math.random()*0.3); }
 
-  const points = []; // points[radiusIndex][ringIndex]
-  for(let i=0;i<numRadii;i++){
-    const angle = (i/numRadii) * Math.PI*2;
-    const row = [];
-    for(let r=1;r<=numRings;r++){
-      const frac = (r/numRings) * jitter[i];
-      const px = cx + Math.cos(angle) * R * frac;
-      const py = cy + Math.sin(angle) * R * frac;
-      row.push([px,py]);
+    const points = [];
+    for(let i=0;i<numRadii;i++){
+      const angle = (i/numRadii) * Math.PI*2;
+      const row = [];
+      for(let r=1;r<=numRings;r++){
+        const frac = (r/numRings) * jitter[i];
+        row.push([cx + Math.cos(angle)*R*frac, cy + Math.sin(angle)*R*frac]);
+      }
+      points.push(row);
+
+      const outer = row[row.length-1];
+      const line = document.createElementNS(ns,'line');
+      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+      line.setAttribute('x2', outer[0]); line.setAttribute('y2', outer[1]);
+      svg.appendChild(line);
+
+      const anchor = document.createElementNS(ns,'line');
+      anchor.setAttribute('class','anchor');
+      anchor.setAttribute('x1', outer[0]); anchor.setAttribute('y1', outer[1]);
+      anchor.setAttribute('x2', cx + Math.cos(angle) * (R*1.35));
+      anchor.setAttribute('y2', cy + Math.sin(angle) * (R*1.35));
+      svg.appendChild(anchor);
     }
-    points.push(row);
-    // radius line, from center to outer point
-    const outer = row[row.length-1];
-    const line = document.createElementNS(ns,'line');
-    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-    line.setAttribute('x2', outer[0]); line.setAttribute('y2', outer[1]);
-    svg.appendChild(line);
 
-    // anchor thread beyond the web edge, to viewBox border
-    const anchor = document.createElementNS(ns,'line');
-    anchor.setAttribute('class','anchor');
-    anchor.setAttribute('x1', outer[0]); anchor.setAttribute('y1', outer[1]);
-    anchor.setAttribute('x2', cx + Math.cos(angle) * (R*1.35));
-    anchor.setAttribute('y2', cy + Math.sin(angle) * (R*1.35));
-    svg.appendChild(anchor);
+    for(let r=0;r<numRings;r++){
+      const pl = document.createElementNS(ns,'polyline');
+      const pts = points.map(row => row[r]);
+      pts.push(pts[0]);
+      pl.setAttribute('points', pts.map(p=>p.join(',')).join(' '));
+      svg.appendChild(pl);
+    }
+
+    if(!reduce){
+      const all = svg.querySelectorAll('line, polyline');
+      all.forEach((el, idx) => {
+        const len = el.getTotalLength ? el.getTotalLength() : 200;
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len;
+        el.style.transition = 'stroke-dashoffset 900ms ease';
+        setTimeout(()=>{ el.style.strokeDashoffset = 0; }, 60 + idx*22);
+      });
+    }
   }
 
-  // spiral rings connecting same-index points across radii
-  const rings = [];
-  for(let r=0;r<numRings;r++){
-    const pl = document.createElementNS(ns,'polyline');
-    const pts = points.map(row => row[r]);
-    pts.push(pts[0]); // close the ring
-    pl.setAttribute('points', pts.map(p=>p.join(',')).join(' '));
-    svg.appendChild(pl);
-    rings.push(pl);
-  }
+  // larger web, top-right corner
+  generateWeb(document.getElementById('heroWebTR'), 470, 130, 320, 18, 8);
 
-  if(!reduce){
-    const all = svg.querySelectorAll('line, polyline');
-    all.forEach((el, idx) => {
-      const len = el.getTotalLength ? el.getTotalLength() : 200;
-      el.style.strokeDasharray = len;
-      el.style.strokeDashoffset = len;
-      el.style.transition = 'stroke-dashoffset 900ms ease';
-      setTimeout(()=>{ el.style.strokeDashoffset = 0; }, 60 + idx*22);
-    });
-  }
+  // second web, bottom-left corner
+  generateWeb(document.getElementById('heroWebBL'), 130, 470, 300, 16, 7);
 })();
 </script>
 
