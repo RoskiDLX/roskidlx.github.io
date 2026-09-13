@@ -272,11 +272,11 @@
 
 <nav class="top">
   <div class="wrap">
-    <div class="brand">Hunter's Web <em>Specimen Showcase</em></div>
+    <div class="brand">Webwright <em>a field guide to spiders</em></div>
     <ul class="navlinks">
       <li><a href="#catalog">Specimens</a></li>
-      <li><a href="#notebook">Field Journal</a></li>
-      <li><a href="#misc">Misc</a></li>
+      <li><a href="#anatomy">Anatomy</a></li>
+      <li><a href="#silk">Silk</a></li>
     </ul>
   </div>
 </nav>
@@ -297,36 +297,92 @@
 <svg class="thread-divider" viewBox="0 0 1120 34" preserveAspectRatio="none" aria-hidden="true">
   <path d="M0,17 Q 140,2 280,17 T 560,17 T 840,17 T 1120,17"/>
 </svg>
-
 <section id="catalog">
   <div class="wrap">
     <div class="section-head">
-      <h2>Specimen catalog</h2>
-      <p>Six species, chosen for how differently they've solved the same problem: staying alive with no bones and no backup.</p>
+      <h2>Specimen catalog: Michigan &amp; Ohio</h2>
+      <p>Six spiders you can actually run into around the Great Lakes — in the garden, under a porch light, or turning over a log.</p>
     </div>
 
     <p class="field-note" style="margin-bottom:40px;">
-      <strong>Not all spiders build webs.</strong> Roughly half of known species hunt without one — running down prey, ambushing from burrows, or stalking in daylight with eyesight sharper than their size suggests. The catalog below mixes web-builders and wanderers on purpose.
+      <strong>Both states share almost the same spider fauna.</strong> Cold winters and the same mix of woodland, farmland, and lakeshore habitat mean a garden in Ann Arbor and one in Columbus will turn up nearly identical residents. Only one species below is worth any real caution.
     </p>
 
     <div class="grid">
 
-      <article class="card" style="--spider-color:#C9A227; --mark-color:#7A6112;">
+      <article class="card" style="--spider-color:#1A1A1A; --mark-color:#C9A227;">
         <div class="icon-row">
-          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Golden silk orb-weaver icon">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Black-and-yellow garden spider icon">
             <g class="leg">
               <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
               <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
             </g>
             <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
             <ellipse class="body" cx="50" cy="58" rx="14" ry="18"/>
-            <circle class="mark" cx="50" cy="55" r="5"/>
+            <circle class="mark" cx="50" cy="50" r="3"/>
+            <circle class="mark" cx="50" cy="59" r="3"/>
+            <circle class="mark" cx="50" cy="68" r="3"/>
           </svg>
-          <span class="habitat-tag">warm forest</span>
+          <span class="habitat-tag">sunny garden</span>
         </div>
-        <h3>Golden Silk Orb-Weaver</h3>
-        <div class="sci">Trichonephila clavipes</div>
-        <p>Spins webs with a visible golden cast in low light. Females can be twenty times the mass of males, and the web itself is often rebuilt overnight, thread by thread.</p>
+        <h3>Black-and-Yellow Garden Spider</h3>
+        <div class="sci">Argiope aurantia</div>
+        <p>Builds a wheel-shaped web anchored by a bold zigzag stitch down the middle, usually in a sunny patch of tall grass or garden edge. Common across both states from midsummer through the first hard frost.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#6B5A3E; --mark-color:#8B4A34;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Furrow orb weaver icon">
+            <g class="leg">
+              <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
+              <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
+            </g>
+            <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
+            <ellipse class="body" cx="50" cy="59" rx="13" ry="17"/>
+            <rect class="mark" x="46" y="50" width="8" height="18" rx="3"/>
+          </svg>
+          <span class="habitat-tag">bridges &amp; docks</span>
+        </div>
+        <h3>Furrow Orb Weaver</h3>
+        <div class="sci">Larinioides cornutus</div>
+        <p>Favors the undersides of bridges, porch eaves, and anything near standing water. Tears down and eats most of its own web every morning, then rebuilds it fresh by dusk.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#161213; --mark-color:#EDE3CF;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Bold jumping spider icon">
+            <g class="leg">
+              <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
+              <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
+            </g>
+            <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
+            <ellipse class="body" cx="50" cy="58" rx="14" ry="17"/>
+            <circle class="mark" cx="46" cy="54" r="2.6"/>
+            <circle class="mark" cx="54" cy="54" r="2.6"/>
+            <circle class="mark" cx="50" cy="65" r="2.6"/>
+          </svg>
+          <span class="habitat-tag">fences &amp; siding</span>
+        </div>
+        <h3>Bold Jumping Spider</h3>
+        <div class="sci">Phidippus audax</div>
+        <p>Hunts by sight instead of silk, stalking prey across fences and siding before pouncing several times its own body length. The chelicerae flash iridescent green in direct sun.</p>
+      </article>
+
+      <article class="card" style="--spider-color:#4A3B2A; --mark-color:transparent;">
+        <div class="icon-row">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Dark fishing spider icon">
+            <g class="leg">
+              <path d="M38 45 L8 32 M38 45 L5 50 M38 45 L10 68 M38 45 L20 85"/>
+              <path d="M62 45 L92 32 M62 45 L95 50 M62 45 L90 68 M62 45 L80 85"/>
+            </g>
+            <ellipse class="body" cx="50" cy="45" rx="10" ry="7"/>
+            <ellipse class="body" cx="50" cy="58" rx="12" ry="12"/>
+          </svg>
+          <span class="habitat-tag">streambanks</span>
+        </div>
+        <h3>Dark Fishing Spider</h3>
+        <div class="sci">Dolomedes tenebrosus</div>
+        <p>One of the largest spiders in the region, often mistaken for a small crab. Rests head-down on tree trunks near streams and can walk out onto the water's surface to ambush prey.</p>
       </article>
 
       <article class="card" style="--spider-color:#8B4A34; --mark-color:#5C2E1F;">
@@ -339,83 +395,31 @@
             <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
             <ellipse class="body" cx="50" cy="60" rx="13" ry="20"/>
           </svg>
-          <span class="habitat-tag">grassland</span>
+          <span class="habitat-tag">leaf litter</span>
         </div>
         <h3>Wolf Spider</h3>
-        <div class="sci">Lycosidae</div>
-        <p>Hunts on foot instead of waiting in silk. Mothers carry their egg sac attached to the spinnerets, then let the spiderlings ride on their back until the first molt.</p>
-      </article>
-
-      <article class="card" style="--spider-color:#3E6E63; --mark-color:#C9A227;">
-        <div class="icon-row">
-          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Peacock jumping spider icon">
-            <g class="leg">
-              <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
-              <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
-            </g>
-            <ellipse class="body" cx="50" cy="42" rx="9" ry="9"/>
-            <ellipse class="body" cx="50" cy="58" rx="14" ry="17"/>
-            <circle class="mark" cx="44" cy="55" r="3"/>
-            <circle class="mark" cx="56" cy="55" r="3"/>
-            <circle class="mark" cx="50" cy="65" r="3"/>
-          </svg>
-          <span class="habitat-tag">open scrub</span>
-        </div>
-        <h3>Peacock Jumping Spider</h3>
-        <div class="sci">Maratus volans</div>
-        <p>Males raise iridescent abdominal flaps and drum out a rhythm to court a female — one of the few courtship displays built as much for sound as for color.</p>
-      </article>
-
-      <article class="card" style="--spider-color:#9C8B6E; --mark-color:transparent;">
-        <div class="icon-row">
-          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Huntsman spider icon">
-            <g class="leg">
-              <path d="M38 45 L8 32 M38 45 L5 50 M38 45 L10 68 M38 45 L20 85"/>
-              <path d="M62 45 L92 32 M62 45 L95 50 M62 45 L90 68 M62 45 L80 85"/>
-            </g>
-            <ellipse class="body" cx="50" cy="45" rx="10" ry="7"/>
-            <ellipse class="body" cx="50" cy="58" rx="12" ry="12"/>
-          </svg>
-          <span class="habitat-tag">bark & crevice</span>
-        </div>
-        <h3>Huntsman Spider</h3>
-        <div class="sci">Sparassidae</div>
-        <p>Flattened enough to slide under loose bark, and able to shift legs into a crab-like sideways gait — one of the fastest walkers, relative to size, of any land animal.</p>
+        <div class="sci">Tigrosa &amp; Hogna spp.</div>
+        <p>Hunts on foot through leaf litter and lawns rather than waiting in a web. Females carry their egg sac attached to the spinnerets, then carry the spiderlings on their back after hatching.</p>
       </article>
 
       <article class="card" style="--spider-color:#161213; --mark-color:#A6332B;">
         <div class="icon-row">
-          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Redback spider icon">
+          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Northern black widow icon">
             <g class="leg">
               <path d="M40 40 L15 20 M40 40 L10 45 M40 40 L15 65 M40 40 L25 82"/>
               <path d="M60 40 L85 20 M60 40 L90 45 M60 40 L85 65 M60 40 L75 82"/>
             </g>
             <ellipse class="body" cx="50" cy="42" rx="8" ry="8"/>
             <ellipse class="body" cx="50" cy="59" rx="12" ry="16"/>
-            <rect class="mark" x="46" y="52" width="8" height="16" rx="2"/>
+            <circle class="mark" cx="50" cy="51" r="2.4"/>
+            <circle class="mark" cx="50" cy="58" r="2.4"/>
+            <circle class="mark" cx="50" cy="65" r="2.4"/>
           </svg>
-          <span class="habitat-tag">dry shelter</span>
+          <span class="habitat-tag">brush piles</span>
         </div>
-        <h3>Redback Spider</h3>
-        <div class="sci">Latrodectus hasseltii</div>
-        <p>A close relative of the black widow, marked by a red stripe down the abdomen. The bite is medically significant but rarely dangerous now that antivenom is widely available.</p>
-      </article>
-
-      <article class="card" style="--spider-color:#6B4A3A; --mark-color:transparent;">
-        <div class="icon-row">
-          <svg class="spider-icon" viewBox="0 0 100 100" role="img" aria-label="Chilean rose tarantula icon">
-            <g class="leg" style="stroke-width:3.4;">
-              <path d="M38 42 L12 25 M38 42 L8 48 M38 42 L12 68 M38 42 L24 84"/>
-              <path d="M62 42 L88 25 M62 42 L92 48 M62 42 L88 68 M62 42 L76 84"/>
-            </g>
-            <ellipse class="body" cx="50" cy="43" rx="10" ry="9"/>
-            <ellipse class="body" cx="50" cy="61" rx="16" ry="19"/>
-          </svg>
-          <span class="habitat-tag">arid burrow</span>
-        </div>
-        <h3>Chilean Rose Tarantula</h3>
-        <div class="sci">Grammostola rosea</div>
-        <p>Slow-moving and famously unbothered by handling, which has made it one of the most kept tarantulas. Females can live more than twenty years — decades longer than most spiders.</p>
+        <h3>Northern Black Widow</h3>
+        <div class="sci">Latrodectus variolus</div>
+        <p>The Great Lakes region's only medically significant spider, though it's shy and rarely bites unless trapped against skin. Look for a broken row of red spots down the back rather than the solid hourglass of its southern relative.</p>
       </article>
 
     </div>
