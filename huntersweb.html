@@ -95,25 +95,18 @@
     overflow:hidden;
     padding-top:20px;
   }
-  .hero-web{
+  .corner-web{
     position:absolute;
-    top:-140px;
-    right:-160px;
+    pointer-events:none;
     width:min(720px, 90vw);
     height:min(720px, 90vw);
-    pointer-events:none;
     opacity:0.9;
   }
-  .hero-web line, .hero-web polyline{
-    fill:none;
-    stroke:var(--thread);
-    stroke-width:1;
-    stroke-linecap:round;
-  }
-  .hero-web .anchor{ stroke:var(--thread); opacity:0.55; }
-  .hero-spider{ fill:var(--bg-alt); }
-  .hero-spider .leg{ stroke:var(--rust); stroke-width:2.2; fill:none; stroke-linecap:round; }
-  .hero-spider .body{ fill:var(--rust); }
+  .corner-web--tr{ top:-140px; right:-160px; }
+  .corner-web--bl{ bottom:-160px; left:-160px; }
+  .corner-web line, .corner-web polyline{ fill:none; stroke:var(--thread); stroke-width:1; stroke-linecap:round; }
+  .corner-web .anchor{ stroke:var(--thread); opacity:0.55; }
+
 
   .hero-content{
     position:relative;
@@ -282,7 +275,8 @@
 </nav>
 
 <section class="hero">
-  <svg class="hero-web" id="heroWeb" viewBox="0 0 600 600" aria-hidden="true"></svg>
+  <svg class="corner-web corner-web--tr" id="heroWebTR" viewBox="0 0 600 600" aria-hidden="true"></svg>
+  <svg class="corner-web corner-web--bl" id="heroWebBL" viewBox="0 0 600 600" aria-hidden="true"></svg>
   <div class="wrap hero-content">
     <h1>Eight legs, three lungs,<br>and a thread <span class="amber">stronger than steel</span> by weight.</h1>
     <p class="lede"> A working catalog and complete field notes of our exclusive collection.</p>
