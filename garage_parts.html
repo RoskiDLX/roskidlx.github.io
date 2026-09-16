@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Parts // Neo-Garage</title>
+  <style>
+    body {
+      background-color: #0d0a1e;
+      color: #e8e0ff;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: #e8ff9e;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    /* ---------- Themed table ---------- */
+    .garage-table {
+      width: 100%;
+      max-width: 720px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      background-color: #1a1838;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(232, 255, 158, 0.06);
+    }
+
+    .garage-table thead th {
+      background-color: #1c1548;
+      color: #e8ff9e;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid rgba(232, 255, 158, 0.35);
+    }
+
+    .garage-table tbody td {
+      padding: 0.65rem 1rem;
+      color: #d8d0f8;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .garage-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .garage-table tbody tr:hover td {
+      background-color: #22204a;
+    }
+
+    .garage-table tbody td:first-child {
+      color: #ffb0c0;
+      font-weight: 500;
+    }
+
+    /* Status pill styling for the last column */
+    .garage-table tbody td:last-child {
+      color: #b8b0e8;
+      font-size: 0.8rem;
+    }
+
+    .load-msg {
+      color: #a8a0d8;
+      font-style: italic;
+    }
+
+    .error-msg {
+      color: #ff5078;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⚙️ PARTS INVENTORY</h1>
+
+  <!-- The table renders here -->
+  <div id="table-target">
+    <p class="load-msg">Loading parts…</p>
+  </div>
+
+  <script>
+    // --------------------------------------------------------------
+    // Load a CSV file and render it as a themed HTML table.
+    // Change CSV_FILE to point to any CSV in your site folder.
+    // --------------------------------------------------------------
+    const CSV_FILE = 'parts.csv';
+    const TARGET   = document.getElementById('table-target');
+
+    async function loadCSV(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Could not load ${url} (${res.status})`);
+      return await res.text();
+    }
+
+    // Minimal but robust CSV parser (handles quoted fields with commas)
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let field = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (inQuotes) {
+          if (char === '"' && next === '"') { field += '"'; i++; }
+          else if (char === '"') { inQuotes = false; }
+          else { field += char; }
+        } else {
+          if (char === '"') { inQuotes = true; }
+          else if (char === ',') { row.push(field); field = ''; }
+          else if (char === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+          else if (char === '\r') { /* skip */ }
+          else { field += char; }
+        }
+      }
+      // Flush last field/row
+      if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+      return rows.filter(r => r.some(c => c.trim() !== ''));
+    }
+
+    function buildTable(rows) {
+      if (!rows.length) throw new Error('CSV is empty');
+
+      const headers = rows[0];
+      const body    = rows.slice(1);
+
+      const table = document.createElement('table');
+      table.className = 'garage-table';
+
+      // ---- thead ----
+      const thead = document.createElement('thead');
+      const headRow = document.createElement('tr');
+      headers.forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h.trim();
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+
+      // ---- tbody ----
+      const tbody = document.createElement('tbody');
+      body.forEach(r => {
+        const tr = document.createElement('tr');
+        // Pad/truncate so every row has same column count as headers
+        for (let i = 0; i < headers.length; i++) {
+          const td = document.createElement('td');
+          td.textContent = (r[i] ?? '').trim();
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+
+      return table;
+    }
+
+    (async () => {
+      try {
+        const csv = await loadCSV(CSV_FILE);
+        const rows = parseCSV(csv);
+        TARGET.innerHTML = '';
+        TARGET.appendChild(buildTable(rows));
+      } catch (err) {
+        TARGET.innerHTML = `<p class="error-msg">⚠️ ${err.message}</p>`;
+        console.error(err);
+      }
+    })();
+  </script>
+
+</body>
+</html>
