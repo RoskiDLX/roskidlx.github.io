@@ -201,6 +201,9 @@
   .links{
     display:flex;
     flex-direction:column;
+    border:1px solid var(--line);
+    padding:16px;
+    position:relative;
   }
   .link-row{
     display:flex;
@@ -208,9 +211,7 @@
     justify-content:space-between;
     gap:16px;
     padding:16px 2px;
-    border-bottom:1px solid var(--line);
-    text-decoration:none;
-    color:var(--ink);
+
   }
   .link-row:first-child{ border-top:1px solid var(--line); }
   .link-row .idx{
