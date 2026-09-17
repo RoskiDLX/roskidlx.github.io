@@ -280,7 +280,19 @@
     letter-spacing:0.1em;
     text-transform:uppercase;
   }
-  footer::after{ content:">>Terminating<<"; color:var(--laven); content:" // "; color:var(--magenta); }
+footer::before {
+  content: ">>Terminating<<";
+  color: var(--laven);
+  margin-right: 0.4em;
+}
+
+footer::after {
+  content: "//";
+  color: var(--magenta);
+}
+  
+/*  footer::after{ content:">>Terminating<<"; color:var(--laven); content:" // "; color:var(--magenta); } */
+
 </style>
 </head>
 <body>
