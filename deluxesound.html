@@ -20,48 +20,93 @@
   html,body{ height:100%; }
   body{
     margin:0;
-/* Base dark indigo night */
-  background-color: #0a0818;
-  background-image:
-    /* Star layer 3 — larger, brighter stars (foreground) */
-    radial-gradient(2px 2px at 20px 30px, #e8ff9e, transparent),
-    radial-gradient(2px 2px at 40px 70px, #ffffff, transparent),
-    radial-gradient(2px 2px at 90px 40px, #b8b0e8, transparent),
-    radial-gradient(2px 2px at 130px 80px, #e8ff9e, transparent),
-    radial-gradient(2px 2px at 160px 120px, #ffffff, transparent),
-    /* Star layer 2 — medium stars */
-    radial-gradient(1px 1px at 50px 160px, #ffffff, transparent),
-    radial-gradient(1px 1px at 100px 200px, #e8ff9e, transparent),
-    radial-gradient(1px 1px at 150px 50px, #b8b0e8, transparent),
-    radial-gradient(1px 1px at 200px 100px, #ffffff, transparent),
-    radial-gradient(1px 1px at 250px 180px, #e8ff9e, transparent),
-    /* Star layer 1 — tiny distant stars */
-    radial-gradient(1px 1px at 10px 90px, #a8a0d8, transparent),
-    radial-gradient(1px 1px at 80px 10px, #a8a0d8, transparent),
-    radial-gradient(1px 1px at 120px 150px, #a8a0d8, transparent),
-    radial-gradient(1px 1px at 180px 20px, #a8a0d8, transparent),
-    radial-gradient(1px 1px at 220px 220px, #a8a0d8, transparent),
-    /* Indigo night depth gradient */
-    radial-gradient(ellipse at 50% 0%, #1a1440 0%, #0d0a1e 45%, #06040f 100%);
-  background-size:
-    200px 200px, 200px 200px, 200px 200px, 200px 200px, 200px 200px,
-    250px 250px, 250px 250px, 250px 250px, 250px 250px, 250px 250px,
-    300px 300px, 300px 300px, 300px 300px, 300px 300px, 300px 300px,
-    100% 100%;
-  background-repeat: repeat, repeat, repeat, repeat, repeat,
-                     repeat, repeat, repeat, repeat, repeat,
-                     repeat, repeat, repeat, repeat, repeat,
-                     no-repeat;
-  background-attachment: fixed;
-  background-color: #06040f;
-    
-    font-family:'JetBrains Mono', monospace;
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    padding:90px 20px 60px;
+
+
   }
 
+.night-sky {
+  position: relative; /* or your existing fixed/absolute */
+  background-color: #06040f;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, #1a1440 0%, #0d0a1e 45%, #06040f 100%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Flicker group A — odd stars from your original list */
+.night-sky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, #e8ff9e, transparent),
+    radial-gradient(2px 2px at 90px 40px, #b8b0e8, transparent),
+    radial-gradient(2px 2px at 160px 120px, #ffffff, transparent),
+    radial-gradient(1px 1px at 100px 200px, #e8ff9e, transparent),
+    radial-gradient(1px 1px at 250px 180px, #e8ff9e, transparent),
+    radial-gradient(1px 1px at 10px 90px, #a8a0d8, transparent),
+    radial-gradient(1px 1px at 120px 150px, #a8a0d8, transparent),
+    radial-gradient(1px 1px at 220px 220px, #a8a0d8, transparent);
+  background-size:
+    200px 200px, 200px 200px, 200px 200px,
+    250px 250px, 250px 250px,
+    300px 300px, 300px 300px, 300px 300px;
+  background-repeat: repeat;
+  animation: twinkle-a 5s ease-in-out infinite;
+}
+
+/* Flicker group B — even stars, different rhythm so it doesn't sync with A */
+.night-sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(2px 2px at 40px 70px, #ffffff, transparent),
+    radial-gradient(2px 2px at 130px 80px, #e8ff9e, transparent),
+    radial-gradient(1px 1px at 50px 160px, #ffffff, transparent),
+    radial-gradient(1px 1px at 150px 50px, #b8b0e8, transparent),
+    radial-gradient(1px 1px at 200px 100px, #ffffff, transparent),
+    radial-gradient(1px 1px at 80px 10px, #a8a0d8, transparent),
+    radial-gradient(1px 1px at 180px 20px, #a8a0d8, transparent);
+  background-size:
+    200px 200px, 200px 200px,
+    250px 250px, 250px 250px, 250px 250px,
+    300px 300px, 300px 300px;
+  background-repeat: repeat;
+  animation: twinkle-b 6.5s ease-in-out infinite;
+  animation-delay: -2.3s; /* desyncs it from group A immediately */
+}
+
+@keyframes twinkle-a {
+  0%, 100% { opacity: 1;    }
+  10%      { opacity: 0.6;  }
+  20%      { opacity: 0.9;  }
+  35%      { opacity: 0.4;  }
+  50%      { opacity: 0.85; }
+  65%      { opacity: 0.5;  }
+  80%      { opacity: 1;    }
+  90%      { opacity: 0.7;  }
+}
+
+@keyframes twinkle-b {
+  0%, 100% { opacity: 0.9;  }
+  15%      { opacity: 0.45; }
+  30%      { opacity: 1;    }
+  45%      { opacity: 0.6;  }
+  60%      { opacity: 0.95; }
+  75%      { opacity: 0.35; }
+  90%      { opacity: 0.8;  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .night-sky::before,
+  .night-sky::after { animation: none; }
+}
+
+  
   main{
     position:relative;
     z-index:1;
