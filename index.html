@@ -75,7 +75,10 @@
                      repeat, repeat, repeat, repeat, repeat,
                      no-repeat;
   background-attachment: fixed;
+
+    /*
   background-color: #06040f;
+*/
     
     overflow:hidden;
   }
@@ -116,11 +119,12 @@
   }
 
   .stage{
-    position:fixed; inset:0;
-    display:flex; align-items:center; justify-content:center;
-    background:
-      radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 60%),
-      #000;
+    
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:none; /* was: radial-gradient(...), #000 */
+  pointer-events:none;
+    
   }
   .spin-wrap{
     width:min(92vmin, 900px);
