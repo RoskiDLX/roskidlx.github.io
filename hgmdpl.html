@@ -97,20 +97,42 @@
 
   /* ---------- HERO ---------- */
   .hero{
+
+
+     position:relative;
+  overflow:hidden;
+  min-height: min(100vw, 900px); /* matches the SVG's own width(=height) cap */
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(227,212,136,0.06) 0%, rgba(227,212,136,0) 55%),
+    var(--bg);
+    
+    /*
     position:relative;
     overflow:hidden;
     background:
       radial-gradient(ellipse at 50% 0%, rgba(227,212,136,0.06) 0%, rgba(227,212,136,0) 55%),
       var(--bg);
-  }
+  */
+    }
 
   .lyre-outline {
+
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  width:min(90%, 900px);
+  height:auto;
+  opacity:0.85;
+    
+    /*
     display: block;
     position:absolute;
     width: min(100%, 900px);
     height: auto;
     margin: 0 auto;
     opacity:0.85;
+  */
   }
 
   .hero-content{
