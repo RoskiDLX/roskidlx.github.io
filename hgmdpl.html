@@ -122,10 +122,11 @@
 
   .lyre-outline {
 
- position:fixed;
+  position:fixed;
   top:50%;
-  left:0;
-  transform:translate(-50%, -50%);
+  right:0;
+  left:auto;
+  transform:translate(50%, -50%);
   width:min(120vmin, 1400px);
   height:auto;
   opacity:0.85;
@@ -147,6 +148,26 @@
   }
   .title-row h1{ flex:1 1 auto; min-width:0; }
   .logo-slot{
+
+
+      flex:0 0 auto;
+  width:72px;
+  height:72px;
+  border:1px dashed rgba(227,212,136,0.5);
+  border-radius:50%;   /* was 4px */
+  background:rgba(227,212,136,0.05);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-family:'EB Garamond', serif;
+  font-style:italic;
+  font-size:0.68rem;
+  line-height:1.2;
+  color:var(--yellow);
+  padding:4px;
+    
+    /*
     flex:0 0 auto;
     width:72px;
     height:72px;
@@ -163,6 +184,8 @@
     line-height:1.2;
     color:var(--yellow);
     padding:4px;
+
+    */
   }
   .logo-slot img{
     max-width:100%;
