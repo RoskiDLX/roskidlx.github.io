@@ -259,6 +259,42 @@
       transition:none !important;
     }
   }
+
+.post-photo{
+  display:block;
+  margin-top:14px;
+  max-width:220px;
+  width:100%;
+  height:auto;
+  border:1px solid var(--line);
+  border-radius:2px;
+  cursor:zoom-in;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.post-photo:hover{
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(10,8,6,0.92);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+  z-index:50;
+  cursor:zoom-out;
+}
+.lightbox.active{ display:flex; }
+.lightbox img{
+  max-width:90vw;
+  max-height:90vh;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  border-radius:2px;
+}
+  
 </style>
 </head>
 <body>
@@ -299,12 +335,12 @@
 <section id="catalog">
   <div class="wrap">
     <div class="section-head">
-      <h2>Specimen catalog: Michigan &amp; Ohio</h2>
-      <p>Six spiders you can actually run into around the Great Lakes — in the garden, under a porch light, or turning over a log.</p>
+      <h2>Specimen catalog: Michigan, Ohio, &amp; Kentucky</h2>
+      <p>Commmon targets for our maintained inventory. </p>
     </div>
 
     <p class="field-note" style="margin-bottom:40px;">
-      <strong>Both states share almost the same spider fauna.</strong> Cold winters and the same mix of woodland, farmland, and lakeshore habitat mean a garden in Ann Arbor and one in Columbus will turn up nearly identical residents. Only one species below is worth any real caution.
+      <strong>Similar spider fauna can be found amoungst the tumbling hills of central midwest. </strong> Cold winters and the same mix of woodland, farmland, and lakeshore habitat mean a garden in Ann Arbor and one in Columbus will turn up nearly identical residents. Only one species below is worth any real caution.
     </p>
 
     <div class="grid">
@@ -436,7 +472,13 @@
     </dif>
     <h3> 2026.09.05</h3>
     <p> Location: Pinckney, Michigan </p>
-    <p> Coordinates: [42.416835, -83.962511] </p>
+    <img class="post-photo" src="photos/orb-weaver-01.jpg" alt="[Describe what's in the photo]" onclick="openLightbox(this)"
+    <br>
+    <h3> 2026.09.05</h3>
+    <p> Location: Pinckney, Michigan </p>
+    <img class="post-photo" src="photos/orb-weaver-01.jpg" alt="[Describe what's in the photo]" onclick="openLightbox(this)"
+    <br>
+      
   </div>  
 </section>
 
