@@ -470,17 +470,23 @@
     <dif class="section-head">
       <h2> Field Log </h2>
     </dif>
+    <h3> 2026.09.23</h3>
+    <p> Location: Oakland County, Michigan</p>
+    <img class="post-photo">
+    
     <h3> 2026.09.17</h3>
     <p> Location: Oakland County, Michigan</p>
+    <img class="post-photo" src="huntersweb/20260917_212433.jpg" alt="Snap 01" onclick="openLightbox(this)"
     <br>
     <h3> 2026.09.06, 2026.09.07</h3>
     <p> Location: Washtenaw County, Michigan </p>
     <p> Captures: Argiope, Micrathena, Verrucosa</p>
-    <img class="post-photo" src="huntersweb/orb-weaver-01.jpg" alt="[Describe what's in the photo]" onclick="openLightbox(this)"
+    <img class="post-photo" src="huntersweb/20260906_142403.jpg" alt="Dragonfly" onclick="openLightbox(this)"
     <br>
-    <h3> 2026.09.05</h3>
+    <h3> 2026.09.05, 2026.09.06</h3>
     <p> Location: Livingston County, Michigan </p>
-    <img class="post-photo" src="huntersweb/orb-weaver-01.jpg" alt="[Describe what's in the photo]" onclick="openLightbox(this)"
+    <img class="post-photo" src="huntersweb/20260906_1143000.jpg" alt="Moth Larvae" onclick="openLightbox(this)"
+    <img class="post-photo" src="huntersweb/20260905_210545.jpg" alt="Moth Larvae" onclick="openLightbox(this)"
     <br>
     <h3> 2026.09.</h3>
     <p> Location: Pinckney, Michigan </p>
@@ -595,5 +601,27 @@
 })();
 </script>
 
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+  <script>
+function openLightbox(imgEl){
+  const full = imgEl.dataset.full || imgEl.src;
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  lbImg.src = full;
+  lbImg.alt = imgEl.alt;
+  lb.classList.add('active');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('active');
+}
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeLightbox();
+});
+</script>
+
+  
 </body>
 </html>
