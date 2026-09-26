@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harcerska Grupa Muzyczna Detroit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root{
+    --bg:#14241A;
+    --bg-deep:#0F1B13;
+    --bg-alt:#1B2F20;
+    --bg-card:#1C3122;
+    --ink:#F3F2EC;
+    --ink-dim:#A9AFA3;
+    --line: rgba(243,242,236,0.14);
+    --red:#D98B8B;
+    --yellow:#E3D488;
+    --blue:#A9CBE0;
+    --rope-fiber:#E3D488;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    font-size:18px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    line-height:1.2;
+    margin:0;
+    color:var(--ink);
+    letter-spacing:0.01em;
+  }
+
+  a{ color:inherit; }
+
+  :focus-visible{
+    outline:2px solid var(--yellow);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav.top{
+    position:relative;
+    z-index:5;
+    padding:28px 0;
+    border-bottom:1px solid var(--line);
+  }
+  nav.top .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    font-family:'Cinzel', serif;
+    font-size:1.5rem;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:baseline;
+    gap:20px;
+  }
+  .brand em{
+    font-style:italic;
+    font-family:'EB Garamond', serif;
+    color:var(--ink-dim);
+    font-size:1.0rem;
+  }
+  .navlinks{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    margin:0; padding:20;
+    font-size:1.1rem;
+    color:var(--ink-dim);
+    letter-spacing:0.03em;
+  }
+  .navlinks a{ text-decoration:none; }
+  .navlinks a:hover{ color:var(--yellow); }
+  .navlinks a[aria-current="page"]{ color:var(--yellow); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden; /* harmless now, but fine to remove too */
+    background: radial-gradient(ellipse at 50% 0%, rgba(227,212,136,0.06) 0%, rgba(227,212,136,0) 55%);
+  }
+
+  .lyre-outline {
+    position:fixed;
+    top:50%;
+    right:0;
+    left:auto;
+    transform:translate(50%, -50%);
+    width:min(120vmin, 1400px);
+    height:auto;
+    opacity:0.85;
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  .hero-content{
+    position:relative;
+    padding:70px 0 110px;
+    max-width:640px;
+  }
+
+  /* ---------- title row + logo slots ---------- */
+  .title-row{
+    display:flex;
+    align-items:center;
+    gap:40px;
+  }
+  .title-row h1{ flex:1 1 auto; min-width:0; }
+  .logo-slot{
+    flex:0 0 auto;
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:rgba(227,212,136,0.05);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .logo-slot img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    display:block;
+  }
+
+  .hero-content h1{
+    font-size:clamp(1.9rem, 4.2vw, 2.8rem);
+    letter-spacing:0.01em;
+  }
+  .hero-content h1 .red{ color:var(--red); }
+  .hero-content h1 .blue{ color:var(--blue); }
+  .hero-content h1 .yellow{ color:var(--yellow); }
+  .hero-content p.lede{
+    margin-top:22px;
+    font-size:1.4rem;
+    color:var(--ink);
+    max-width:48ch;
+    font-style:italic;
+  }
+  .placeholder-note{
+    display:inline-block;
+    margin-top:18px;
+    font-size:1.0rem;
+    font-family:'EB Garamond', serif;
+    color:var(--yellow);
+    background:rgba(227,212,136,0.08);
+    border:1px dashed rgba(227,212,136,0.5);
+    padding:6px 14px;
+    border-radius:2px;
+    letter-spacing:0.02em;
+  }
+  .hero-meta{
+    margin-top:36px;
+    display:flex;
+    gap:36px;
+    flex-wrap:wrap;
+  }
+  .hero-meta div{ font-size:1.0rem; color:var(--ink-dim); letter-spacing:0.02em; }
+  .hero-meta strong{
+    display:block;
+    font-family:'Cinzel', serif;
+    font-size:1.5rem;
+    color:var(--ink);
+    font-weight:600;
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  section{ padding:64px 0; }
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    margin-bottom:40px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:22px;
+  }
+  .section-head h2{ font-size:1.7rem; }
+  .section-head p{
+    color:var(--ink-dim);
+    max-width:34ch;
+    font-size:1.0rem;
+    margin:0;
+    font-style:italic;
+  }
+
+  .field-note{
+    max-width:66ch;
+    color:var(--ink-dim);
+    font-size:1.2rem;
+  }
+  .field-note strong{ color:var(--ink); font-weight:600; font-family:'Cinzel', serif; font-size:1.1rem; letter-spacing:0.02em; }
+
+  .fill-in{
+    color:var(--ink-dim);
+    font-size:1.1rem;
+    margin:0;
+    font-style:italic;
+  }
+
+  /* ---------- GRID (used on sub-pages) ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .card{
+    background:var(--bg-card);
+    padding:28px 26px 30px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    transition:background 0.2s ease;
+  }
+  .card:hover{ background:#223A29; }
+  .card .icon-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .card-icon{ width:40px; height:40px; }
+  .card-icon .ring{ fill:none; stroke:var(--icon-color, var(--yellow)); stroke-width:2.2; }
+  .card-icon .dot{ fill:var(--icon-color, var(--yellow)); }
+  .tag{
+    font-size:0.9rem;
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+    padding:4px 10px;
+    border-radius:2px;
+    letter-spacing:0.02em;
+  }
+  .card h3{ font-size:1.3rem; }
+  .card .file-link{
+    margin-top:4px;
+    font-size:1.0rem;
+    color:var(--yellow);
+    text-decoration:none;
+    border-bottom:1px dashed rgba(227,212,136,0.5);
+    align-self:flex-start;
+  }
+
+  /* ---------- SONGBOOK VIEWER ---------- */
+  .songbook{
+    display:grid;
+    grid-template-columns:240px 1fr;
+    gap:44px;
+    align-items:start;
+  }
+
+  .song-index{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    border-right:1px solid var(--line);
+    padding-right:20px;
+    position:sticky;
+    top:20px;
+  }
+  .song-index button{
+    all:unset;
+    cursor:pointer;
+    text-align:left;
+    color:var(--ink-dim);
+    font-family:'EB Garamond', serif;
+    font-size:1rem;
+    padding:9px 12px;
+    border-left:2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .song-index button:hover{
+    color:var(--ink);
+    background:rgba(243,242,236,0.04);
+  }
+  .song-index button.active{
+    color:var(--yellow);
+    border-left-color:var(--yellow);
+    background:rgba(227,212,136,0.07);
+  }
+
+  .song-display{ min-width:0; }
+  .song-display h3{
+    font-size:1.6rem;
+    margin-bottom:22px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .song-line-row{
+    display:grid;
+    grid-template-columns:1fr 80px;
+    column-gap:20px;
+    padding:5px 0;
+    align-items:baseline;
+  }
+  .song-line-row .lyric{
+    font-size:1.08rem;
+    color:var(--ink);
+  }
+  .song-line-row .chord{
+    font-family:'Cinzel', serif;
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--yellow);
+    text-align:left;
+    white-space:nowrap;
+  }
+  .song-line-row.blank{ height:14px; }
+  .song-line-row.ref .lyric{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--blue);
+  }
+  .song-line-row.ref{
+    padding-top:12px;
+    padding-bottom:8px;
+    border-top:1px dashed var(--line);
+    margin-top:6px;
+  }
+
+  @media (max-width:800px){
+    .songbook{ grid-template-columns:1fr; gap:24px; }
+    .song-index{
+      flex-direction:row;
+      flex-wrap:wrap;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      padding-right:0;
+      padding-bottom:16px;
+      position:static;
+    }
+    .song-index button{ padding:6px 10px; border-left:none; border-bottom:2px solid transparent; }
+    .song-index button.active{ border-left:none; border-bottom-color:var(--yellow); }
+    .song-line-row{ grid-template-columns:1fr 60px; }
+  }
+
+  /* ---------- RESOURCES ---------- */
+  .res-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:28px;
+  }
+  .res-item{ border-top:2px solid var(--res-color, var(--yellow)); padding-top:16px; }
+  .res-item h4{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:1.1rem;
+    margin-bottom:8px;
+    letter-spacing:0.01em;
+  }
+  .res-item p{ color:var(--ink-dim); font-size:1.1rem; margin:0; font-style:italic; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:50px 0 60px;
+    border-top:1px solid var(--line);
+    background:var(--bg-deep);
+  }
+  footer .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  footer p{ color:var(--ink-dim); font-size:1.0rem; margin:0; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px){
+    .grid{ grid-template-columns:repeat(2, 1fr); }
+    .res-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+  @media (max-width: 560px){
+    .wrap{ padding:0 20px; }
+    .grid{ grid-template-columns:1fr; }
+    .res-grid{ grid-template-columns:1fr; }
+    .navlinks{ display:none; }
+    .hero-meta{ gap:24px; }
+    .logo-slot{ width:48px; height:48px; font-size:0.7rem; }
+    .title-row{ gap:20px; margin-top:28px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <div class="logo-slot">
+          <img src="hgmd/logo_hgmd.png" alt="HGMD">
+    </div>
+    <div class="brand">⚜️Harcerska Grupa Muzyczna Detroit⚜️<em> </em></div>
+    <div class="logo-slot">
+          <img src="hgmd/logo_zhp_krzyz.png" alt="KRZYŻ">
+    </div>
+    <ul class="navlinks">
+      <li><a href="hgmdpl_spiew.html">Śpiewnik</a></li>
+      <li><a href="hgmdpl_instrumenty.html">Instrumenty</a></li>
+      <li><a href="hgmdpl.html" aria-current="page">Głowny</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+
+  <svg class="lyre-outline"
+       xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 1254 1254"
+       role="img"
+       aria-labelledby="lyre-title lyre-desc">
+    <title id="lyre-title">Lyre outline</title>
+    <desc id="lyre-desc">Clean outline tracing of the supplied lyre emblem.</desc>
+    <g fill="none"
+       stroke="#736e57"
+       stroke-width="5"
+       stroke-linecap="round"
+       stroke-linejoin="round">
+      <path d="M 874.00,872.00 L 853.00,866.00 L 859.00,885.00 L 859.00,906.00 L 857.00,914.00 L 851.00,927.00 L 843.00,937.00 L 834.00,944.00 L 824.00,949.00 L 812.00,952.00 L 796.00,952.00 L 784.00,949.00 L 769.00,941.00 L 756.00,928.00 L 754.00,924.00 L 723.00,936.00 L 717.00,937.00 L 721.00,955.00 L 728.00,972.00 L 740.00,992.00 L 758.00,1011.00 L 774.00,1022.00 L 793.00,1031.00 L 810.00,1035.00 L 832.00,1036.00 L 847.00,1034.00 L 868.00,1027.00 L 884.00,1017.00 L 898.00,1004.00 L 906.00,993.00 L 916.00,970.00 L 919.00,953.00 L 918.00,932.00 L 913.00,914.00 L 903.00,896.00 L 891.00,883.00 Z"/>
+      <path d="M 366.00,876.00 L 356.00,883.00 L 341.00,900.00 L 333.00,916.00 L 328.00,939.00 L 329.00,962.00 L 334.00,979.00 L 345.00,999.00 L 360.00,1015.00 L 373.00,1024.00 L 392.00,1032.00 L 412.00,1036.00 L 439.00,1035.00 L 457.00,1030.00 L 470.00,1024.00 L 489.00,1011.00 L 503.00,997.00 L 512.00,985.00 L 523.00,964.00 L 530.00,944.00 L 530.00,936.00 L 516.00,932.00 L 495.00,923.00 L 481.00,939.00 L 466.00,948.00 L 451.00,952.00 L 434.00,952.00 L 420.00,948.00 L 410.00,942.00 L 400.00,932.00 L 391.00,916.00 L 388.00,903.00 L 388.00,887.00 L 394.00,866.00 L 378.00,870.00 Z"/>
+      <path d="M 930.00,476.00 L 888.00,488.00 L 854.00,507.00 L 824.00,534.00 L 806.00,561.00 L 840.00,636.00 L 856.00,682.00 L 872.00,671.00 L 893.00,662.00 L 906.00,659.00 L 931.00,659.00 L 947.00,663.00 L 961.00,670.00 L 972.00,678.00 L 985.00,693.00 L 998.00,722.00 L 1000.00,753.00 L 993.00,777.00 L 972.00,803.00 L 981.00,803.00 L 1006.00,796.00 L 1030.00,784.00 L 1052.00,768.00 L 1078.00,739.00 L 1094.00,711.00 L 1105.00,679.00 L 1109.00,654.00 L 1108.00,613.00 L 1098.00,574.00 L 1087.00,551.00 L 1071.00,528.00 L 1048.00,506.00 L 1028.00,493.00 L 996.00,480.00 L 969.00,475.00 Z"/>
+      <path d="M 325.00,477.00 L 290.00,475.00 L 266.00,478.00 L 240.00,486.00 L 209.00,503.00 L 187.00,522.00 L 170.00,544.00 L 156.00,571.00 L 146.00,604.00 L 143.00,629.00 L 145.00,668.00 L 154.00,701.00 L 170.00,733.00 L 185.00,753.00 L 213.00,778.00 L 241.00,794.00 L 266.00,802.00 L 280.00,803.00 L 265.00,787.00 L 257.00,773.00 L 252.00,755.00 L 252.00,731.00 L 258.00,709.00 L 268.00,691.00 L 289.00,671.00 L 305.00,663.00 L 321.00,659.00 L 345.00,659.00 L 362.00,663.00 L 395.00,682.00 L 414.00,629.00 L 446.00,560.00 L 431.00,538.00 L 396.00,506.00 L 363.00,488.00 Z"/>
+      <path d="M 427.00,345.00 L 409.00,354.00 L 397.00,369.00 L 393.00,384.00 L 395.00,400.00 L 409.00,420.00 L 424.00,427.00 L 447.00,427.00 L 469.00,415.00 L 477.00,429.00 L 481.00,445.00 L 482.00,486.00 L 466.00,553.00 L 421.00,657.00 L 409.00,694.00 L 401.00,738.00 L 403.00,785.00 L 421.00,833.00 L 440.00,860.00 L 459.00,879.00 L 496.00,904.00 L 522.00,916.00 L 554.00,925.00 L 556.00,929.00 L 552.00,944.00 L 552.00,955.00 L 556.00,963.00 L 554.00,977.00 L 541.00,981.00 L 535.00,987.00 L 530.00,1009.00 L 517.00,1022.00 L 472.00,1050.00 L 488.00,1061.00 L 505.00,1066.00 L 547.00,1064.00 L 569.00,1107.00 L 626.00,1181.00 L 676.00,1115.00 L 704.00,1064.00 L 745.00,1066.00 L 760.00,1062.00 L 778.00,1051.00 L 731.00,1020.00 L 720.00,1008.00 L 715.00,987.00 L 696.00,976.00 L 695.00,962.00 L 699.00,946.00 L 695.00,928.00 L 757.00,903.00 L 793.00,878.00 L 825.00,841.00 L 845.00,797.00 L 850.00,769.00 L 846.00,710.00 L 831.00,660.00 L 780.00,538.00 L 771.00,501.00 L 769.00,453.00 L 774.00,429.00 L 782.00,415.00 L 809.00,428.00 L 827.00,427.00 L 843.00,419.00 L 855.00,402.00 L 857.00,379.00 L 849.00,361.00 L 838.00,351.00 L 824.00,345.00 L 797.00,345.00 L 775.00,355.00 L 755.00,376.00 L 742.00,400.00 L 732.00,437.00 L 729.00,480.00 L 522.00,480.00 L 515.00,418.00 L 507.00,395.00 L 494.00,373.00 L 480.00,358.00 L 463.00,348.00 L 449.00,344.00 Z"/>
+      <path d="M 532.00,875.00 L 536.00,869.00 L 543.00,866.00 L 707.00,866.00 L 711.00,867.00 L 717.00,872.00 L 719.00,877.00 L 719.00,883.00 L 718.00,884.00 L 533.00,884.00 L 532.00,883.00 Z"/>
+      <path d="M 730.00,498.00 L 733.00,522.00 L 741.00,561.00 L 768.00,660.00 L 773.00,694.00 L 774.00,725.00 L 769.00,759.00 L 762.00,779.00 L 752.00,798.00 L 742.00,812.00 L 727.00,828.00 L 708.00,842.00 L 702.00,844.00 L 701.00,499.00 Z"/>
+      <path d="M 668.00,498.00 L 688.00,499.00 L 687.00,849.00 L 667.00,848.00 Z"/>
+      <path d="M 633.00,498.00 L 653.00,499.00 L 652.00,849.00 L 632.00,848.00 Z"/>
+      <path d="M 598.00,498.00 L 619.00,499.00 L 618.00,849.00 L 597.00,848.00 Z"/>
+      <path d="M 564.00,498.00 L 584.00,499.00 L 583.00,849.00 L 563.00,848.00 Z"/>
+      <path d="M 521.00,498.00 L 549.00,499.00 L 548.00,843.00 L 540.00,840.00 L 524.00,828.00 L 501.00,801.00 L 491.00,783.00 L 482.00,759.00 L 477.00,725.00 L 478.00,695.00 L 482.00,665.00 L 492.00,623.00 L 511.00,557.00 Z"/>
+      <path d="M 627.00,53.00 L 550.00,178.00 L 523.00,236.00 L 509.00,283.00 L 503.00,322.00 L 503.00,360.00 L 513.00,372.00 L 527.00,400.00 L 535.00,431.00 L 538.00,463.00 L 713.00,463.00 L 716.00,431.00 L 724.00,400.00 L 737.00,374.00 L 749.00,359.00 L 749.00,328.00 L 745.00,294.00 L 728.00,234.00 L 690.00,156.00 Z"/>
+    </g>
+  </svg>
+
+  <div class="wrap hero-content">
+    <div class="title-row">
+      <h1>Harcerki i Harcerzy <span class="red">polski śpiew</span> i <span class="blue">instrumentacje</span> muzyczną.</h1>
+    </div>
+    <p class="lede">--- Archiwum z słów i notacje muzyke polskiego przez tematy ludowe, patriotyczne, religijne, i harcerskie. ---</p>
+  </div>
+</section>
+
+<section id="spiewnik-viewer">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Śpiewnik <span style="color:var(--blue);">·</span> teksty i akordy</h2>
+      <p>Wybierz piosenkę z listy, aby zobaczyć tekst i akordy.</p>
+    </div>
+
+    <div class="songbook">
+      <nav class="song-index" id="song-index">
+        <!-- populated by JS from hgmd/spiewnik.xlsx -->
+      </nav>
+
+      <div class="song-display">
+        <h3 id="song-title">[Tytuł piosenki]</h3>
+        <div class="song-lines" id="song-lines">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="resources">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Resources <span style="color:var(--yellow);">·</span> files &amp; links</h2>
+      <p>[w budowie]</p>
+    </div>
+
+    <div class="res-grid">
+      <div class="res-item" style="--res-color:#D98B8B;">
+        <h4>Muzyke</h4>
+        <p>[tekst.]</p>
+      </div>
+      <div class="res-item" style="--res-color:#A9CBE0;">
+        <h4>Rekordy</h4>
+        <p>[tekst.]</p>
+      </div>
+      <div class="res-item" style="--res-color:#E3D488;">
+        <h4>Słów</h4>
+        <p>[tekst.]</p>
+      </div>
+      <div class="res-item" style="--res-color:#A9AFA3;">
+        <h4>Akordy</h4>
+        <p>[tekst.]</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>🇵🇱 Harcerska Grupa Muzyczna Detroit 🇺🇸</p>
+    <p></p>
+  </div>
+</footer>
+<footer>
+  <div class="wrap">
+     <a href="https://roskidlx.github.io">All Works</a> © 2026 by <a href="https://github.com/RoskiDLX">Roski DLX</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+  </div>
+</footer>
+
+<script>
+const SONGBOOK_FILE = 'hgmd/spiewnik.xlsx'; // path to your Excel file
+let SONGS = {};
+
+async function loadSongbook(){
+  const nav = document.getElementById('song-index');
+  nav.innerHTML = '<p style="color:var(--ink-dim); font-style:italic; font-size:0.95rem;">Wczytywanie…</p>';
+
+  try{
+    const res = await fetch(SONGBOOK_FILE);
+    if(!res.ok) throw new Error('File not found: ' + SONGBOOK_FILE);
+    const buf = await res.arrayBuffer();
+    const wb = XLSX.read(buf, { type: 'array' });
+    const sheetName = wb.SheetNames.includes('Piosenki') ? 'Piosenki' : wb.SheetNames[0];
+    const sheet = wb.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+
+    // Long format: one row per lyric line, Tytuł repeated on every row of that song.
+    // Consecutive rows sharing the same Tytuł are grouped into one song, in order.
+    SONGS = {};
+    let order = [];
+    let currentId = null;
+
+    rows.slice(1).forEach(row => {
+      const title = String(row[0] || '').trim();
+      const chord = String(row[1] || '').trim();
+      const lyric = String(row[2] || '').trim();
+      if(!title) return;
+
+      if(!SONGS[title]){
+        const id = 's' + order.length;
+        SONGS[id] = { title, lines: [] };
+        order.push(id);
+        currentId = id;
+      } else if(SONGS[currentId] && SONGS[currentId].title !== title){
+        // title changed but already exists earlier — treat as a new block with the same name
+        const id = 's' + order.length;
+        SONGS[id] = { title, lines: [] };
+        order.push(id);
+        currentId = id;
+      }
+
+      SONGS[currentId].lines.push({ chord, lyric });
+    });
+
+    SONGS.__order = order;
+    buildIndex();
+  }catch(err){
+    nav.innerHTML = '<p style="color:var(--red); font-style:italic; font-size:0.95rem;">Nie udało się wczytać śpiewnika. (' + err.message + ')</p>';
+    console.error(err);
+  }
+}
+
+function renderSong(id){
+  const song = SONGS[id];
+  if(!song) return;
+
+  document.getElementById('song-title').textContent = song.title;
+
+  const linesEl = document.getElementById('song-lines');
+  linesEl.innerHTML = '';
+  song.lines.forEach(line => {
+    const isBlank = line.chord === '' && line.lyric === '';
+    const isRef = line.lyric.toUpperCase().startsWith('REF');
+    const row = document.createElement('div');
+    row.className = 'song-line-row' + (isBlank ? ' blank' : '') + (isRef ? ' ref' : '');
+    row.innerHTML = `<span class="lyric">${line.lyric}</span><span class="chord">${line.chord}</span>`;
+    linesEl.appendChild(row);
+  });
+
+  document.querySelectorAll('.song-index button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.song === id);
+  });
+}
+
+function buildIndex(){
+  const nav = document.getElementById('song-index');
+  nav.innerHTML = '';
+  const ids = SONGS.__order || [];
+  ids.forEach((id, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.song = id;
+    btn.textContent = `${i+1}. ${SONGS[id].title}`;
+    btn.addEventListener('click', () => renderSong(id));
+    nav.appendChild(btn);
+  });
+  if(ids.length) renderSong(ids[0]);
+}
+
+loadSongbook();
+</script>
+
+</body>
+</html>
