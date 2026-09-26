@@ -549,6 +549,7 @@ async function loadSongbook(){
     // Consecutive rows sharing the same Tytuł are grouped into one song, in order.
     SONGS = {};
     let order = [];
+    let currentTitle = null;
     let currentId = null;
 
     rows.slice(1).forEach(row => {
@@ -557,17 +558,11 @@ async function loadSongbook(){
       const lyric = String(row[2] || '').trim();
       if(!title) return;
 
-      if(!SONGS[title]){
-        const id = 's' + order.length;
-        SONGS[id] = { title, lines: [] };
-        order.push(id);
-        currentId = id;
-      } else if(SONGS[currentId] && SONGS[currentId].title !== title){
-        // title changed but already exists earlier — treat as a new block with the same name
-        const id = 's' + order.length;
-        SONGS[id] = { title, lines: [] };
-        order.push(id);
-        currentId = id;
+      if(title !== currentTitle){
+        currentId = 's' + order.length;
+        SONGS[currentId] = { title, lines: [] };
+        order.push(currentId);
+        currentTitle = title;
       }
 
       SONGS[currentId].lines.push({ chord, lyric });
