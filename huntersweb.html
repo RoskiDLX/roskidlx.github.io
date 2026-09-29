@@ -139,6 +139,34 @@
     font-weight:500;
   }
 
+  .corner-leaves{
+  position:absolute;
+  pointer-events:none;
+  width:min(420px, 60vw);
+  height:min(420px, 60vw);
+  opacity:0.85;
+}
+.corner-leaves--tr{ top:-30px; right:-30px; }
+.corner-leaves--bl{ bottom:-30px; left:-30px; }
+.corner-leaves .stem{
+  fill:none;
+  stroke:var(--leaf, #6B8E4E);
+  stroke-width:1.4;
+  stroke-linecap:round;
+}
+.corner-leaves .leaf-shape{
+  fill:var(--leaf, #6B8E4E);
+  fill-opacity:0.10;
+  stroke:var(--leaf, #6B8E4E);
+  stroke-width:1;
+}
+.corner-leaves .vein{
+  fill:none;
+  stroke:var(--leaf, #6B8E4E);
+  stroke-width:0.6;
+  opacity:0.7;
+}
+
   /* ---------- SILK DIVIDER ---------- */
   .thread-divider{
     width:100%;
@@ -466,6 +494,8 @@
 </svg>
   
 <section id="fieldlog">
+  <svg class="corner-leaves corner-leaves--tr" id="fieldLogLeaves" viewBox="0 0 400 400" aria-hidden="true"></svg>
+  <svg class="corner-leaves corner-leaves--bl" id="fieldLogLeavesBL" viewBox="0 0 400 400" aria-hidden="true"></svg>
   <div class="wrap">
     <dif class="section-head">
       <h2> Field Log </h2>
@@ -625,7 +655,90 @@ document.addEventListener('keydown', e => {
   if(e.key === 'Escape') closeLightbox();
 });
 </script>
+<script>
+  function generateLeafBranch(svg, originX, originY, angleDeg, length, leafCount){
+  const ns = 'http://www.w3.org/2000/svg';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rad = deg => deg * Math.PI / 180;
 
+  // slightly bowed stem via a quadratic bezier
+  const a = rad(angleDeg);
+  const endX = originX + Math.cos(a) * length;
+  const endY = originY + Math.sin(a) * length;
+  const bow = length * 0.18;
+  const perp = a - Math.PI / 2;
+  const ctrlX = originX + Math.cos(a) * (length * 0.5) + Math.cos(perp) * bow;
+  const ctrlY = originY + Math.sin(a) * (length * 0.5) + Math.sin(perp) * bow;
+
+  const stem = document.createElementNS(ns, 'path');
+  stem.setAttribute('class', 'stem');
+  stem.setAttribute('d', `M ${originX},${originY} Q ${ctrlX},${ctrlY} ${endX},${endY}`);
+  svg.appendChild(stem);
+
+  const bezierPoint = t => {
+    const x = (1-t)*(1-t)*originX + 2*(1-t)*t*ctrlX + t*t*endX;
+    const y = (1-t)*(1-t)*originY + 2*(1-t)*t*ctrlY + t*t*endY;
+    return [x, y];
+  };
+  const bezierTangentAngle = t => {
+    const dx = 2*(1-t)*(ctrlX-originX) + 2*t*(endX-ctrlX);
+    const dy = 2*(1-t)*(ctrlY-originY) + 2*t*(endY-ctrlY);
+    return Math.atan2(dy, dx) * 180 / Math.PI;
+  };
+
+  for(let i = 1; i <= leafCount; i++){
+    const t = i / (leafCount + 1);
+    const [lx, ly] = bezierPoint(t);
+    const tangent = bezierTangentAngle(t);
+    const side = i % 2 === 0 ? 1 : -1;
+    const leafAngle = tangent + side * 55;
+    const leafSize = 26 - (t * 10); // taper smaller toward the tip
+
+    const g = document.createElementNS(ns, 'g');
+    g.setAttribute('transform', `translate(${lx},${ly}) rotate(${leafAngle}) scale(${leafSize/26})`);
+
+    const shape = document.createElementNS(ns, 'path');
+    shape.setAttribute('class', 'leaf-shape');
+    shape.setAttribute('d', 'M 0,0 Q 13,-11 0,-26 Q -13,-11 0,0 Z');
+    g.appendChild(shape);
+
+    const midrib = document.createElementNS(ns, 'line');
+    midrib.setAttribute('class', 'vein');
+    midrib.setAttribute('x1', 0); midrib.setAttribute('y1', -2);
+    midrib.setAttribute('x2', 0); midrib.setAttribute('y2', -24);
+    g.appendChild(midrib);
+
+    [0.35, 0.55, 0.75].forEach(vt => {
+      const vy = -2 - vt * 22;
+      const vw = 7 * (1 - vt);
+      [-1, 1].forEach(sign => {
+        const vein = document.createElementNS(ns, 'line');
+        vein.setAttribute('class', 'vein');
+        vein.setAttribute('x1', 0); vein.setAttribute('y1', vy);
+        vein.setAttribute('x2', sign * vw); vein.setAttribute('y2', vy - vw * 0.6);
+        g.appendChild(vein);
+      });
+    });
+
+    svg.appendChild(g);
+  }
+
+  if(!reduce){
+    const all = svg.querySelectorAll('.stem, .leaf-shape, .vein');
+    all.forEach((el, idx) => {
+      const len = el.getTotalLength ? el.getTotalLength() : 60;
+      el.style.strokeDasharray = len;
+      el.style.strokeDashoffset = len;
+      el.style.transition = 'stroke-dashoffset 700ms ease';
+      setTimeout(() => { el.style.strokeDashoffset = 0; }, 60 + idx * 40);
+    });
+  }
+}
+
+// example call — adjust origin/angle/length/count to taste
+generateLeafBranch(document.getElementById('fieldLogLeaves'), 380, 20, 200, 260, 5);
+  generateLeafBranch(document.getElementById('fieldLogLeavesBL'), 20, 380, -20, 260, 5);
+</script>
   
 </body>
 </html>
