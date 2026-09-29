@@ -143,11 +143,11 @@
     font-weight:500;
   }
 
-  .corner-leaves{
+.corner-leaves{
   position:absolute;
   pointer-events:none;
-  width:min(420px, 60vw);
-  height:min(420px, 60vw);
+  width:min(560px, 75vw);   /* was: min(420px, 60vw) */
+  height:min(560px, 75vw);
   opacity:0.85;
 }
 .corner-leaves--tr{ top:-30px; right:-30px; }
@@ -345,8 +345,8 @@
 
   
 <section class="hero">
-  <svg class="corner-web corner-web--tr" id="heroWebTR" viewBox="0 0 600 600" aria-hidden="true"></svg>
-  <svg class="corner-web corner-web--bl" id="heroWebBL" viewBox="0 0 600 600" aria-hidden="true"></svg>
+<svg class="corner-leaves corner-leaves--tr" id="fieldLogLeaves" viewBox="0 0 600 600" aria-hidden="true"></svg>
+<svg class="corner-leaves corner-leaves--bl" id="fieldLogLeavesBL" viewBox="0 0 600 600" aria-hidden="true"></svg>
   <div class="wrap hero-content">
     <h1>Eight legs, three lungs,<br>and a thread <span class="amber">stronger than steel</span> by weight.</h1>
     <p class="lede"> A working catalog and complete field notes of our exclusive collection.</p>
@@ -655,17 +655,24 @@ document.addEventListener('keydown', e => {
   if(e.key === 'Escape') closeLightbox();
 });
 </script>
+  
 <script>
-  function generateLeafBranch(svg, originX, originY, angleDeg, length, leafCount){
+function generateLeafBranch(svg, originX, originY, angleDeg, length, leafCount, opts = {}){
   const ns = 'http://www.w3.org/2000/svg';
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const rad = deg => deg * Math.PI / 180;
+  const {
+    bowSide = 1,
+    leafBaseSize = 40,
+    subBranches = 0,
+    subFactor = 0.48,
+    subLeafCount = 3,
+    isSubBranch = false
+  } = opts;
 
-  // slightly bowed stem via a quadratic bezier
+  const rad = deg => deg * Math.PI / 180;
   const a = rad(angleDeg);
   const endX = originX + Math.cos(a) * length;
   const endY = originY + Math.sin(a) * length;
-  const bow = length * 0.18;
+  const bow = length * 0.22 * bowSide;
   const perp = a - Math.PI / 2;
   const ctrlX = originX + Math.cos(a) * (length * 0.5) + Math.cos(perp) * bow;
   const ctrlY = originY + Math.sin(a) * (length * 0.5) + Math.sin(perp) * bow;
@@ -691,8 +698,8 @@ document.addEventListener('keydown', e => {
     const [lx, ly] = bezierPoint(t);
     const tangent = bezierTangentAngle(t);
     const side = i % 2 === 0 ? 1 : -1;
-    const leafAngle = tangent + side * 55;
-    const leafSize = 26 - (t * 10); // taper smaller toward the tip
+    const leafAngle = tangent + side * 58;
+    const leafSize = leafBaseSize - (t * leafBaseSize * 0.35); // taper toward the tip
 
     const g = document.createElementNS(ns, 'g');
     g.setAttribute('transform', `translate(${lx},${ly}) rotate(${leafAngle}) scale(${leafSize/26})`);
@@ -723,21 +730,44 @@ document.addEventListener('keydown', e => {
     svg.appendChild(g);
   }
 
-  if(!reduce){
-    const all = svg.querySelectorAll('.stem, .leaf-shape, .vein');
-    all.forEach((el, idx) => {
-      const len = el.getTotalLength ? el.getTotalLength() : 60;
-      el.style.strokeDasharray = len;
-      el.style.strokeDashoffset = len;
-      el.style.transition = 'stroke-dashoffset 700ms ease';
-      setTimeout(() => { el.style.strokeDashoffset = 0; }, 60 + idx * 40);
+  // branchier: sprout shorter side-branches along the main stem
+  for(let j = 0; j < subBranches; j++){
+    const t = (j + 1) / (subBranches + 1);
+    const [sx, sy] = bezierPoint(t);
+    const tangent = bezierTangentAngle(t);
+    const side = j % 2 === 0 ? 1 : -1;
+    const subAngle = tangent + side * 36;
+    generateLeafBranch(svg, sx, sy, subAngle, length * subFactor, subLeafCount, {
+      bowSide, leafBaseSize: leafBaseSize * 0.75, subBranches: 0, isSubBranch: true
     });
+  }
+
+  // only run the draw-in animation once, from the outermost (top-level) call —
+  // otherwise every sub-branch would re-trigger it on the elements drawn before it
+  if(!isSubBranch){
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!reduce){
+      const all = svg.querySelectorAll('.stem, .leaf-shape, .vein');
+      all.forEach((el, idx) => {
+        const len = el.getTotalLength ? el.getTotalLength() : 60;
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len;
+        el.style.transition = 'stroke-dashoffset 700ms ease';
+        setTimeout(() => { el.style.strokeDashoffset = 0; }, 60 + idx * 35);
+      });
+    }
   }
 }
 
-// example call — adjust origin/angle/length/count to taste
-generateLeafBranch(document.getElementById('fieldLogLeaves'), 380, 20, 200, 260, 5);
-  generateLeafBranch(document.getElementById('fieldLogLeavesBL'), 20, 380, -20, 260, 5);
+// top-right: droops downward from the corner into the page, long and branchy
+generateLeafBranch(document.getElementById('fieldLogLeaves'), 560, 10, 165, 430, 7, {
+  bowSide: 1, leafBaseSize: 40, subBranches: 3, subFactor: 0.48, subLeafCount: 3
+});
+
+// bottom-left: mirrored 180° so it rises into the page as a matched pair
+generateLeafBranch(document.getElementById('fieldLogLeavesBL'), 40, 590, 345, 430, 7, {
+  bowSide: 1, leafBaseSize: 40, subBranches: 3, subFactor: 0.48, subLeafCount: 3
+});
 </script>
   
 </body>
