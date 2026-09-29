@@ -150,6 +150,7 @@
   height:min(560px, 75vw);
   opacity:0.85;
 }
+  
 .corner-leaves--tr{ top:-30px; right:-30px; }
 .corner-leaves--bl{ bottom:-30px; left:-30px; }
 .corner-leaves .stem{
@@ -345,8 +346,8 @@
 
   
 <section class="hero">
-<svg class="corner-leaves corner-leaves--tr" id="fieldLogLeaves" viewBox="0 0 600 600" aria-hidden="true"></svg>
-<svg class="corner-leaves corner-leaves--bl" id="fieldLogLeavesBL" viewBox="0 0 600 600" aria-hidden="true"></svg>
+  <svg class="corner-web corner-web--tr" id="heroWebTR" viewBox="0 0 600 600" aria-hidden="true"></svg>
+  <svg class="corner-web corner-web--bl" id="heroWebBL" viewBox="0 0 600 600" aria-hidden="true"></svg>
   <div class="wrap hero-content">
     <h1>Eight legs, three lungs,<br>and a thread <span class="amber">stronger than steel</span> by weight.</h1>
     <p class="lede"> A working catalog and complete field notes of our exclusive collection.</p>
@@ -497,8 +498,8 @@
   <path d="M0,17 Q 140,2 280,17 T 560,17 T 840,17 T 1120,17"/>
 </svg>
   <section id="fieldlog">
-  <svg class="corner-leaves corner-leaves--tr" id="fieldLogLeaves" viewBox="0 0 400 400" aria-hidden="true"></svg>
-  <svg class="corner-leaves corner-leaves--bl" id="fieldLogLeavesBL" viewBox="0 0 400 400" aria-hidden="true"></svg>
+<svg class="corner-leaves corner-leaves--tr" id="fieldLogLeaves" viewBox="0 0 600 600" aria-hidden="true"></svg>
+<svg class="corner-leaves corner-leaves--bl" id="fieldLogLeavesBL" viewBox="0 0 600 600" aria-hidden="true"></svg>
   <div class="wrap">
     <div class="section-head">
       <h2>Field Log</h2>
@@ -657,7 +658,7 @@ document.addEventListener('keydown', e => {
 </script>
   
 <script>
-function generateLeafBranch(svg, originX, originY, angleDeg, length, leafCount, opts = {}){
+  function generateLeafBranch(svg, originX, originY, angleDeg, length, leafCount, opts = {}){
   const ns = 'http://www.w3.org/2000/svg';
   const {
     bowSide = 1,
