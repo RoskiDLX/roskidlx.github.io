@@ -65,9 +65,11 @@
     border-bottom:1px solid var(--line);
   }
   nav.top .wrap{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+  display:flex;
+  align-items:center;
+  justify-content:center;  /* was: space-between */
+  flex-wrap:wrap;          /* new — lets navlinks drop to a second line */
+  gap:6px 20px;
   }
   .brand{
     font-family:'Cinzel', serif;
@@ -84,6 +86,9 @@
     font-size:1.0rem;
   }
   .navlinks{
+    flex-basis:100%;         /* new — forces it onto its own full-width row */
+    justify-content:center;  /* new — centers the links under the title */
+    margin-top:10px;         /* new — a little breathing room from the row above */
     display:flex;
     gap:28px;
     list-style:none;
@@ -290,7 +295,7 @@
     display:flex;
     align-items:center;
     gap:10px;
-    font-size:1.3rem;
+    font-size:1.0rem;
     color:var(--ink-dim);
     letter-spacing:0.1em;
     text-transform:uppercase;
@@ -360,14 +365,14 @@
     <div class="logo-slot">
           <img src="hgmd/logo_hgmd.png" alt="HGMD">
     </div>
-    <div class="brand">⚜️Harcerska Grupa Muzyczna Detroit⚜️<em> </em></div>
+    <div class="brand">Harcerska Grupa Muzyczna Detroit<em> </em></div>
     <div class="logo-slot">
           <img src="hgmd/logo_zhp_krzyz.png" alt="KRZYŻ">
     </div>
     <ul class="navlinks">
-      <li><a href="hgmd/spiewnik.html">Śpiewnik</a></li>
-      <li><a href="hgmd/instrumenty.html">Instrumenty</a></li>
-      <li><a href="hgmdpl.html" aria-current="page">Głowny</a></li>
+      <li><a href="hgmd/spiewnik.html">⚜️Śpiewnik</a></li>
+      <li><a href="hgmd/instrumenty.html">⚜️Instrumenty</a></li>
+      <li><a href="hgmdpl.html" aria-current="page">⚜️Głowny</a></li>
     </ul>
   </div>
 </nav>
@@ -415,7 +420,7 @@
 <section id="log">
   <div class="wrap">
     <div class="section-head">
-      <h2><span style="color:var(--blue);">·</span> Lekcje <span style="color:var(--blue);">·</span>  </h2>
+      <h2><span style="color:var(--blue);">·</span> Lekcje <span style="color:var(--blue);">·</span>  Zadanie <span style="color:var(--blue);">·</span></h2>
       <!-- <p>[Strona w budowie]</p> -->
     </div>
 
