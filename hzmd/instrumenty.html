@@ -6,7 +6,6 @@
 <title>Harcerski Zespół Muzyczny Detroit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root{
     --bg:#14241A;
@@ -419,12 +418,145 @@
   }
 
   
-  /* PODRECZNIK */
-  
-  .podrecznik {
-    max-width: 1300px; /* Change this value to make it narrower or wider */
-    width: 100%;      /* Ensures it shrinks nicely on smaller mobile screens */
-    margin: 0 auto;   /* Centers the viewer on the page */
+  /* ---------- PDF VIEWER ---------- */
+  .pdf-viewer{
+    display:grid;
+    grid-template-columns:240px minmax(0, 1fr);
+    gap:32px;
+    align-items:start;
+  }
+
+  .pdf-index{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    border-right:1px solid var(--line);
+    padding-right:20px;
+  }
+  .pdf-index button{
+    all:unset;
+    cursor:pointer;
+    text-align:left;
+    color:var(--ink-dim);
+    font-family:'EB Garamond', serif;
+    font-size:1rem;
+    padding:10px 12px;
+    border-left:2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .pdf-index button:hover{
+    color:var(--ink);
+    background:rgba(243,242,236,0.04);
+  }
+  .pdf-index button.active{
+    color:var(--yellow);
+    border-left-color:var(--yellow);
+    background:rgba(227,212,136,0.07);
+  }
+  .pdf-index button:focus-visible{
+    outline:2px solid var(--yellow);
+    outline-offset:2px;
+  }
+
+  .pdf-stage{
+    min-width:0;
+    border:1px solid var(--line);
+    background:var(--bg-deep);
+  }
+  .pdf-toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px 12px;
+    padding:10px 14px;
+    border-bottom:1px solid var(--line);
+  }
+  .pdf-title{
+    flex:1 1 160px;
+    min-width:0;
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:1rem;
+    color:var(--ink);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .pdf-pageinfo{
+    color:var(--ink-dim);
+    font-size:0.95rem;
+    white-space:nowrap;
+  }
+  .pdf-zoom{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color:var(--ink-dim);
+    font-size:0.9rem;
+  }
+  .pdf-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:38px;
+    min-height:38px;
+    padding:0 12px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:transparent;
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    font-size:1rem;
+    text-decoration:none;
+    cursor:pointer;
+  }
+  .pdf-btn:hover{ border-color:var(--yellow); color:var(--yellow); }
+  .pdf-btn[hidden]{ display:none; }
+
+  /* the scrolling pane that holds the rendered pages */
+  .pdf-scroll{
+    position:relative;
+    height:70vh;
+    height:min(70dvh, 760px);
+    overflow-x:auto;
+    overflow-y:scroll;
+    -webkit-overflow-scrolling:touch;
+    background:#0A130E;
+    padding:12px;
+  }
+  .pdf-page{
+    margin:0 auto 12px;
+    background:#fff;
+    box-shadow:0 2px 12px rgba(0,0,0,0.45);
+  }
+  .pdf-page canvas{ display:block; }
+  .pdf-message{
+    margin:0;
+    padding:28px 8px;
+    text-align:center;
+    color:var(--ink-dim);
+    font-style:italic;
+  }
+  .pdf-message a{ color:var(--yellow); }
+  .pdf-message code{ font-style:normal; color:var(--ink); }
+
+  @media (max-width:800px){
+    .pdf-viewer{ grid-template-columns:1fr; gap:20px; }
+    .pdf-index{
+      flex-direction:row;
+      flex-wrap:wrap;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      padding-right:0;
+      padding-bottom:14px;
+    }
+    .pdf-index button{
+      padding:8px 10px;
+      border-left:none;
+      border-bottom:2px solid transparent;
+    }
+    .pdf-index button.active{ border-left:none; border-bottom-color:var(--yellow); }
+    .pdf-scroll{ padding:8px; }
   }
 </style>
 </head>
@@ -477,10 +609,32 @@
     </g>
   </svg>
 
-  <div class="podrecznik">
-      <a href="hzmd_gitara_podrecznik.pdf">Pobierz Podręcznik PDF</a>
-      <object data="hzmd_gitara_podrecznik.pdf#view=fitH&navpanes=0" type="application/pdf" width="100%" height="1200px"> </object>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Instrumenty <span style="color:var(--blue);">·</span> podręczniki</h2>
+      <p>Wybierz plik z listy, aby go otworzyć.</p>
+    </div>
 
+    <div class="pdf-viewer">
+      <nav class="pdf-index" id="pdf-index" aria-label="Lista plików PDF"></nav>
+
+      <div class="pdf-stage">
+        <div class="pdf-toolbar">
+          <div class="pdf-title" id="pdf-title">Podręcznik</div>
+          <span class="pdf-pageinfo" id="pdf-pageinfo"></span>
+          <span class="pdf-zoom">
+            <button type="button" class="pdf-btn" id="pdf-zoom-out" aria-label="Pomniejsz">−</button>
+            <span id="pdf-zoom-label">100%</span>
+            <button type="button" class="pdf-btn" id="pdf-zoom-in" aria-label="Powiększ">+</button>
+          </span>
+          <a class="pdf-btn" id="pdf-open" href="hzmd_gitara_podrecznik.pdf" target="_blank" rel="noopener">Otwórz</a>
+          <a class="pdf-btn" id="pdf-download" href="hzmd_gitara_podrecznik.pdf" download>Pobierz</a>
+        </div>
+        <div class="pdf-scroll" id="pdf-scroll" role="region" aria-label="Podgląd PDF" tabindex="0">
+          <noscript><p class="pdf-message"><a href="hzmd_gitara_podrecznik.pdf">Otwórz podręcznik PDF</a></p></noscript>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -526,92 +680,233 @@
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-const SONGBOOK_FILE = 'spiewnik.xlsx'; // path to your Excel file
-let SONGS = {};
+(function(){
+  // ---- ADD YOUR PDFs HERE ----------------------------------------------
+  // title = text shown in the side menu, file = path to the PDF
+  // (same folder as this page, or a relative path like 'pdf/inny.pdf')
+  const PDFS = [
+    { title: 'Podręcznik Gitary', file: 'hzmd_gitara_podrecznik.pdf' },
+    { title: 'Ćwiczenie - Akordy (Tonacje w A)',       file: 'CWICZENIE_AKORDY_(Tonacje_A).pdf' },
+    { title: '[w budowie]',      file: '' }
+  ];
+  // -----------------------------------------------------------------------
 
-async function loadSongbook(){
-  const nav = document.getElementById('song-index');
-  nav.innerHTML = '<p style="color:var(--ink-dim); font-style:italic; font-size:0.95rem;">Wczytywanie…</p>';
+  const indexEl   = document.getElementById('pdf-index');
+  const scrollEl  = document.getElementById('pdf-scroll');
+  const titleEl   = document.getElementById('pdf-title');
+  const pageInfo  = document.getElementById('pdf-pageinfo');
+  const openLink  = document.getElementById('pdf-open');
+  const dlLink    = document.getElementById('pdf-download');
+  const zoomInBtn = document.getElementById('pdf-zoom-in');
+  const zoomOutBtn= document.getElementById('pdf-zoom-out');
+  const zoomLabel = document.getElementById('pdf-zoom-label');
 
-  try{
-    const res = await fetch(SONGBOOK_FILE);
-    if(!res.ok) throw new Error('File not found: ' + SONGBOOK_FILE);
-    const buf = await res.arrayBuffer();
-    const wb = XLSX.read(buf, { type: 'array' });
-    const sheetName = wb.SheetNames.includes('Piosenki') ? 'Piosenki' : wb.SheetNames[0];
-    const sheet = wb.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-
-    // Long format: one row per lyric line, Tytuł repeated on every row of that song.
-    // Consecutive rows sharing the same Tytuł are grouped into one song, in order.
-    SONGS = {};
-    let order = [];
-    let currentTitle = null;
-    let currentId = null;
-
-    rows.slice(1).forEach(row => {
-      const title = String(row[0] || '').trim();
-      const chord = String(row[1] || '').trim();
-      const lyric = String(row[2] || '').trim();
-      if(!title) return;
-
-      if(title !== currentTitle){
-        currentId = 's' + order.length;
-        SONGS[currentId] = { title, lines: [] };
-        order.push(currentId);
-        currentTitle = title;
-      }
-
-      SONGS[currentId].lines.push({ chord, lyric });
-    });
-
-    SONGS.__order = order;
-    buildIndex();
-  }catch(err){
-    nav.innerHTML = '<p style="color:var(--red); font-style:italic; font-size:0.95rem;">Nie udało się wczytać śpiewnika. (' + err.message + ')</p>';
-    console.error(err);
+  if(typeof pdfjsLib !== 'undefined'){
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   }
-}
 
-function renderSong(id){
-  const song = SONGS[id];
-  if(!song) return;
+  let pdfDoc = null;
+  let zoom = 1;          // 1 = fit to the width of the viewer
+  let ratio = 1.414;     // page height / width, taken from page 1
+  let holders = [];
+  let observer = null;
+  let buildId = 0;       // bumps whenever pages are rebuilt (invalidates stale renders)
+  let loadId = 0;        // bumps whenever a different PDF is chosen
+  let lastWidth = 0;
 
-  document.getElementById('song-title').textContent = song.title;
+  function showMessage(html){
+    teardownPages();
+    scrollEl.innerHTML = '<p class="pdf-message">' + html + '</p>';
+    pageInfo.textContent = '';
+  }
 
-  const linesEl = document.getElementById('song-lines');
-  linesEl.innerHTML = '';
-  song.lines.forEach(line => {
-    const isBlank = line.chord === '' && line.lyric === '';
-    const isRef = line.lyric.toUpperCase().startsWith('REF');
-    const row = document.createElement('div');
-    row.className = 'song-line-row' + (isBlank ? ' blank' : '') + (isRef ? ' ref' : '');
-    row.innerHTML = `<span class="lyric">${line.lyric}</span><span class="chord">${line.chord}</span>`;
-    linesEl.appendChild(row);
+  function teardownPages(){
+    if(observer){ observer.disconnect(); observer = null; }
+    holders = [];
+    buildId++;
+  }
+
+  function setLinks(file){
+    [openLink, dlLink].forEach(a => {
+      if(file){ a.href = file; a.hidden = false; }
+      else { a.removeAttribute('href'); a.hidden = true; }
+    });
+  }
+
+  function markActive(i){
+    indexEl.querySelectorAll('button').forEach((b, n) => {
+      b.classList.toggle('active', n === i);
+      if(n === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+  }
+
+  function updatePageInfo(){
+    if(!pdfDoc || !holders.length){ pageInfo.textContent = ''; return; }
+    const probe = scrollEl.scrollTop + scrollEl.clientHeight * 0.35;
+    let cur = 1;
+    for(let i = 0; i < holders.length; i++){
+      if(holders[i].offsetTop <= probe) cur = i + 1; else break;
+    }
+    pageInfo.textContent = 'Strona ' + cur + ' / ' + holders.length;
+  }
+
+  // Render one page into its placeholder (only when it is near the viewport)
+  async function renderHolder(h, cssW, myBuild){
+    if(h.dataset.rendered) return;
+    h.dataset.rendered = '1';
+    const rid = ++h._rid;
+    try{
+      const page = await pdfDoc.getPage(Number(h.dataset.page));
+      const base = page.getViewport({ scale: 1 });
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const viewport = page.getViewport({ scale: (cssW / base.width) * dpr });
+
+      const canvas = document.createElement('canvas');
+      canvas.width  = Math.floor(viewport.width);
+      canvas.height = Math.floor(viewport.height);
+      canvas.style.width  = cssW + 'px';
+      canvas.style.height = (cssW * base.height / base.width) + 'px';
+
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
+
+      if(myBuild !== buildId || rid !== h._rid) return;   // scrolled away or rebuilt meanwhile
+      h.style.height = canvas.style.height;
+      h.appendChild(canvas);
+    }catch(err){
+      if(myBuild === buildId && rid === h._rid) delete h.dataset.rendered;
+      console.error(err);
+    }
+  }
+
+  // Free the canvas of pages that are far off-screen (keeps phones from running out of memory)
+  function releaseHolder(h){
+    if(!h.dataset.rendered) return;
+    h._rid++;
+    delete h.dataset.rendered;
+    h.innerHTML = '';
+  }
+
+  function buildPages(){
+    if(!pdfDoc) return;
+    teardownPages();
+    const myBuild = buildId;
+
+    lastWidth = scrollEl.clientWidth;
+    const cs = getComputedStyle(scrollEl);
+    const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+    const cssW = Math.max(160, (scrollEl.clientWidth - pad) * zoom);
+    const cssH = cssW * ratio;
+
+    const frag = document.createDocumentFragment();
+    for(let n = 1; n <= pdfDoc.numPages; n++){
+      const h = document.createElement('div');
+      h.className = 'pdf-page';
+      h.dataset.page = n;
+      h.style.width  = cssW + 'px';
+      h.style.height = cssH + 'px';
+      h._rid = 0;
+      holders.push(h);
+      frag.appendChild(h);
+    }
+    scrollEl.innerHTML = '';
+    scrollEl.appendChild(frag);
+    updatePageInfo();
+
+    observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting) renderHolder(e.target, cssW, myBuild);
+        else releaseHolder(e.target);
+      });
+    }, { root: scrollEl, rootMargin: '500px 0px' });
+    holders.forEach(h => observer.observe(h));
+  }
+
+  async function loadPdf(i){
+    const item = PDFS[i];
+    const myLoad = ++loadId;
+    markActive(i);
+    titleEl.textContent = item.title;
+    setLinks(item.file);
+    zoom = 1;
+    zoomLabel.textContent = '100%';
+
+    if(pdfDoc){ pdfDoc.destroy(); pdfDoc = null; }
+
+    if(!item.file){
+      showMessage('Brak pliku. Dodaj nazwę pliku PDF do listy <code>PDFS</code> w kodzie strony.');
+      return;
+    }
+    if(typeof pdfjsLib === 'undefined'){
+      showMessage('Nie udało się załadować przeglądarki PDF. <a href="' + item.file + '" target="_blank" rel="noopener">Otwórz plik bezpośrednio</a>.');
+      return;
+    }
+
+    showMessage('Wczytywanie…');
+    try{
+      const doc = await pdfjsLib.getDocument(item.file).promise;
+      if(myLoad !== loadId){ doc.destroy(); return; }   // another PDF was picked meanwhile
+      pdfDoc = doc;
+
+      const first = await doc.getPage(1);
+      const vp = first.getViewport({ scale: 1 });
+      ratio = vp.height / vp.width;
+      if(myLoad !== loadId) return;
+
+      scrollEl.scrollTop = 0;
+      buildPages();
+    }catch(err){
+      if(myLoad !== loadId) return;
+      console.error(err);
+      showMessage('Nie udało się wczytać pliku PDF. <a href="' + item.file + '" target="_blank" rel="noopener">Otwórz go bezpośrednio</a>.');
+    }
+  }
+
+  function setZoom(z){
+    const next = Math.min(3, Math.max(0.5, Math.round(z * 100) / 100));
+    if(next === zoom || !pdfDoc) return;
+    const pos = scrollEl.scrollTop / (scrollEl.scrollHeight || 1);
+    zoom = next;
+    zoomLabel.textContent = Math.round(zoom * 100) + '%';
+    buildPages();
+    scrollEl.scrollTop = pos * scrollEl.scrollHeight;
+  }
+  zoomInBtn.addEventListener('click',  () => setZoom(zoom + 0.25));
+  zoomOutBtn.addEventListener('click', () => setZoom(zoom - 0.25));
+
+  // page counter follows the scroll position
+  let ticking = false;
+  scrollEl.addEventListener('scroll', () => {
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { ticking = false; updatePageInfo(); });
+  }, { passive: true });
+
+  // re-fit pages when the width changes (rotating a phone, resizing a window)
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if(pdfDoc && Math.abs(scrollEl.clientWidth - lastWidth) > 20){
+        const pos = scrollEl.scrollTop / (scrollEl.scrollHeight || 1);
+        buildPages();
+        scrollEl.scrollTop = pos * scrollEl.scrollHeight;
+      }
+    }, 250);
   });
 
-  document.querySelectorAll('.song-index button').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.song === id);
+  // build the side menu, then open the first PDF
+  PDFS.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = item.title;
+    b.addEventListener('click', () => loadPdf(i));
+    indexEl.appendChild(b);
   });
-}
-
-function buildIndex(){
-  const nav = document.getElementById('song-index');
-  nav.innerHTML = '';
-  const ids = SONGS.__order || [];
-  ids.forEach((id, i) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.dataset.song = id;
-    btn.textContent = `${i+1}. ${SONGS[id].title}`;
-    btn.addEventListener('click', () => renderSong(id));
-    nav.appendChild(btn);
-  });
-  if(ids.length) renderSong(ids[0]);
-}
-
-loadSongbook();
+  loadPdf(0);
+})();
 </script>
 
 </body>
